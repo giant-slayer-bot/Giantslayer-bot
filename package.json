@@ -1,12 +1,16 @@
 {
-  "name": "giant-slayer-bot",
+  "name": "giantslayer-bot-2026",
   "version": "1.0.0",
-  "description": "Trading bot and dashboard",
+  "description": "Deriv Multi-Symbol Anti-Spike Engine",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "ws": "^8.16.0"
+  },
+  "engines": {
+    "node": ">=18.x"
   }
 }
