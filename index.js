@@ -2,15 +2,6 @@
 ===================================================================================
 GIANTSLAYER BOT 2026 - DERIV MULTI-SYMBOL ANTI-SPIKE ENGINE
 ===================================================================================
-Rules:
-* DEX indices removed entirely.
-* Crash Indices (500, 1000, 300N, 250N): BUYS ONLY (Slow upward drift).
-* Boom Indices (500, 1000, 300N, 250N): SELLS ONLY (Slow downward drift).
-* Execution: 0.10-lot micro batches, continuous margin stacking on new M15 bars,
-  staggered 8-symbol concurrent scanning, and global $10,000 profit target basket close.
-* Interface: Clean web dashboard with real-time terminal logs, hiding specific
-  indicator logic (EMA, RSI, MACD, Bollinger Bands) from public view.
-===================================================================================
 */
 
 const express = require('express');
@@ -18,7 +9,6 @@ const WebSocket = require('ws');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Configuration & Environment Control
 const CONFIG = {
     app_id: process.env.DERIV_APP_ID || '1089',
     api_token: process.env.DERIV_API_TOKEN || 'YOUR_API_TOKEN_HERE',
@@ -28,7 +18,6 @@ const CONFIG = {
     timeframe: 'M15'
 };
 
-// Active Asset Array (Crash = Buys Only, Boom = Sells Only - Zero DEX Indices)
 const ASSETS = [
     { symbol: 'R_50', name: 'CRASH 500', type: 'CRASH', action: 'BUY' },
     { symbol: 'R_100', name: 'CRASH 1000', type: 'CRASH', action: 'BUY' },
@@ -40,7 +29,6 @@ const ASSETS = [
     { symbol: 'BOOM250', name: 'BOOM 250N', type: 'BOOM', action: 'SELL' }
 ];
 
-// Runtime State
 let botState = {
     status: CONFIG.mock_mode ? 'MOCK TESTING MODE' : 'LIVE API CONNECTED',
     uptimeStart: Date.now(),
@@ -58,13 +46,13 @@ function addLog(message) {
     console.log(logEntry);
 }
 
-// Express Web Dashboard Interface
 app.get('/', (req, res) => {
     const uptimeSec = Math.floor((Date.now() - botState.uptimeStart) / 1000);
     const hours = String(Math.floor(uptimeSec / 3600)).padStart(2, '0');
     const mins = String(Math.floor((uptimeSec % 3600) / 60)).padStart(2, '0');
     const secs = String(uptimeSec % 60).padStart(2, '0');
 
+    res.setHeader('Content-Type', 'text/html');
     res.send(`
     <!DOCTYPE html>
     <html lang="en">
@@ -155,7 +143,6 @@ app.get('/', (req, res) => {
     `);
 });
 
-// Core Execution Engine & Staggered Scanner
 function startEngine() {
     addLog("[ENGINE] Staggered 8-symbol concurrent scanner initialized (120ms intervals).");
     addLog(`[ENGINE] Rules enforced: DEX removed, Crash=Buys, Boom=Sells, Target=$${CONFIG.target_profit}.`);
@@ -164,7 +151,6 @@ function startEngine() {
         addLog("[MOCK] 120 seed candles loaded per symbol. Streaming live ticks...");
     }
 
-    // Periodic M15 evaluation and margin stacking loop
     setInterval(() => {
         if (CONFIG.mock_mode) {
             const randomAsset = ASSETS[Math.floor(Math.random() * ASSETS.length)];
@@ -183,7 +169,6 @@ function startEngine() {
             botState.floatingPL = botState.activeBatches.reduce((acc, curr) => acc + curr.profit, 0);
             addLog(`[M15 BAR] ${randomAsset.name}: Slow drift confirmed. Executing ${CONFIG.lot_size}-lot ${randomAsset.action} batch (Ticket #${ticketId}).`);
 
-            // Check global target basket close
             if (botState.floatingPL >= CONFIG.target_profit) {
                 addLog(`[TARGET REACHED] Global profit target of $${CONFIG.target_profit} achieved! Closing basket with zero remorse.`);
                 botState.balance += botState.floatingPL;
@@ -194,7 +179,6 @@ function startEngine() {
     }, 12000);
 }
 
-// Start Server
 app.listen(PORT, () => {
     addLog(`[SERVER] Dashboard online at port ${PORT}`);
     startEngine();
