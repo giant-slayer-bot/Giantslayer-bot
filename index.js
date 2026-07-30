@@ -49,27 +49,28 @@ app.get('/', (req, res) => {
                 }
                 .robot-banner {
                     width: 100%;
-                    height: 170px;
+                    height: 190px;
                     border-radius: 16px;
-                    background: #000 url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
+                    background: #000 url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
                     position: relative;
                     margin-bottom: 20px;
-                    border: 1px solid rgba(239, 68, 68, 0.3);
+                    border: 1px solid rgba(56, 189, 248, 0.3);
                     display: flex;
                     align-items: flex-end;
                     justify-content: center;
-                    padding-bottom: 10px;
+                    padding-bottom: 12px;
+                    box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
                 }
                 .robot-banner::after {
                     content: 'GIANTSLAYER AI V2026';
                     font-size: 10px;
                     font-weight: 800;
                     letter-spacing: 2px;
-                    color: #fca5a5;
+                    color: #38bdf8;
                     background: rgba(0, 0, 0, 0.85);
-                    padding: 4px 10px;
+                    padding: 4px 12px;
                     border-radius: 20px;
-                    border: 1px solid rgba(239, 68, 68, 0.4);
+                    border: 1px solid rgba(56, 189, 248, 0.4);
                 }
                 .section-title {
                     font-size: 14px;
@@ -155,10 +156,8 @@ app.get('/', (req, res) => {
 
 // ================= PAGE 2: COMMAND CENTER DASHBOARD =================
 app.post('/dashboard', (req, res) => {
-    // Capture credentials sent from Page 1 if needed
-    const { login_id, api_token } = req.body;
+    const { login_id } = req.body;
     botState.logs.unshift(`[AUTH] Successful handshake for ID: ${login_id || 'Mock-User'}`);
-    
     renderDashboard(req, res);
 });
 
@@ -203,6 +202,31 @@ function renderDashboard(req, res) {
                     justify-content: space-between;
                     align-items: center;
                     margin-bottom: 12px;
+                }
+                .top-right-group {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    gap: 4px;
+                }
+                .status-badge {
+                    font-size: 10px;
+                    background: #1e293b;
+                    padding: 3px 8px;
+                    border-radius: 6px;
+                    color: ${botState.running ? '#4ade80' : '#fca5a5'};
+                }
+                .btn-logout {
+                    background: #ef4444;
+                    color: #ffffff;
+                    border: none;
+                    border-radius: 6px;
+                    padding: 5px 10px;
+                    font-size: 11px;
+                    font-weight: bold;
+                    cursor: pointer;
+                    text-decoration: none;
+                    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
                 }
                 .grid-stats {
                     display: grid;
@@ -255,21 +279,19 @@ function renderDashboard(req, res) {
                     height: 130px;
                     overflow-y: auto;
                 }
-                .back-link {
-                    display: block;
-                    text-align: center;
-                    margin-top: 10px;
-                    color: #64748b;
-                    font-size: 11px;
-                    text-decoration: none;
-                }
             </style>
         </head>
         <body>
             <div class="wrapper">
                 <div class="top-bar">
-                    <span style="font-size: 13px; font-weight: bold; color: #38bdf8;">🟢 GIANTSLAYER BOT 2026</span>
-                    <span style="font-size: 11px; background: #1e293b; padding: 4px 8px; border-radius: 6px; color: ${botState.running ? '#4ade80' : '#fca5a5'}">${botState.running ? 'RUNNING' : 'STANDBY'}</span>
+                    <div>
+                        <span style="font-size: 13px; font-weight: bold; color: #38bdf8; display: block;">🟢 GIANTSLAYER BOT</span>
+                        <span style="font-size: 10px; color: #64748b;">COMMAND CENTER</span>
+                    </div>
+                    <div class="top-right-group">
+                        <span class="status-badge">${botState.running ? 'RUNNING' : 'STANDBY'}</span>
+                        <a href="/" class="btn-logout">LOG OUT</a>
+                    </div>
                 </div>
 
                 <div class="grid-stats">
@@ -313,8 +335,6 @@ function renderDashboard(req, res) {
                         ${botState.logs.join('<br>')}
                     </div>
                 </div>
-
-                <a href="/" class="back-link">← Logout / Return to Credentials Gateway</a>
             </div>
         </body>
         </html>
