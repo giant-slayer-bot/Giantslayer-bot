@@ -1,0 +1,12 @@
+{
+  "name": "giant-slayer-bot",
+  "version": "1.0.0",
+  "description": "Trading bot and dashboard",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
