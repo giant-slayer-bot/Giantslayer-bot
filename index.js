@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>The GiantSlayer Bot AI - Secure Login</title>
+            <title>GIANTSLAYER BOT AI - Secure Login</title>
             <style>
                 * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
                 body {
@@ -123,11 +123,12 @@ app.get('/', (req, res) => {
                     background: #0b0f17;
                     border: 1px solid #38bdf8;
                     border-radius: 0 0 10px 10px;
-                    max-height: 150px;
+                    max-height: 180px;
                     overflow-y: auto;
                     z-index: 99;
                     display: none;
                     margin-top: 2px;
+                    box-shadow: 0 15px 30px rgba(0,0,0,0.9);
                 }
                 .server-option {
                     padding: 10px 14px;
@@ -170,7 +171,7 @@ app.get('/', (req, res) => {
         <body>
             <div class="container">
                 <div class="robot-banner">
-                    <div class="banner-title">THE GIANTSLAYER BOT AI</div>
+                    <div class="banner-title">GIANTSLAYER BOT AI</div>
                 </div>
                 <div class="section-title">MT4/5 LOGIN DETAILS 🔑</div>
                 
@@ -188,16 +189,29 @@ app.get('/', (req, res) => {
                     <div class="form-group">
                         <label>Trading Server</label>
                         <div class="searchable-select-wrapper">
-                            <input type="text" id="serverSearch" name="server" placeholder="Type or search MT4/5 server..." autocomplete="off" required>
+                            <input type="text" id="serverSearch" name="server" placeholder="Search live broker or prop server..." autocomplete="off" required>
                             <div id="serverDropdown" class="server-dropdown-list">
-                                <div class="server-option" onclick="selectServer('Deriv-Server (Real)')">Deriv-Server (Real)</div>
-                                <div class="server-option" onclick="selectServer('Deriv-Demo')">Deriv-Demo</div>
-                                <div class="server-option" onclick="selectServer('DerivSVG-Server')">DerivSVG-Server</div>
+                                <!-- South African / Regulated Brokers -->
+                                <div class="server-option" onclick="selectServer('iFXBrokers-Live')">iFXBrokers-Live</div>
+                                <div class="server-option" onclick="selectServer('iFXBrokers-Server')">iFXBrokers-Server</div>
+                                <div class="server-option" onclick="selectServer('AvaTrade-Real')">AvaTrade-Real</div>
+                                <div class="server-option" onclick="selectServer('AvaTrade-MT5')">AvaTrade-MT5</div>
+                                <!-- Prop Firms -->
                                 <div class="server-option" onclick="selectServer('FTMO-Server')">FTMO-Server</div>
+                                <div class="server-option" onclick="selectServer('FTMO-Server2')">FTMO-Server2</div>
                                 <div class="server-option" onclick="selectServer('FTMO-Demo')">FTMO-Demo</div>
+                                <div class="server-option" onclick="selectServer('FundingPips-Prime')">FundingPips-Prime</div>
+                                <div class="server-option" onclick="selectServer('FundingPips-SIM1')">FundingPips-SIM1</div>
+                                <!-- Global Retail Live Servers -->
+                                <div class="server-option" onclick="selectServer('Exness-Real')">Exness-Real</div>
                                 <div class="server-option" onclick="selectServer('Exness-Real1')">Exness-Real1</div>
-                                <div class="server-option" onclick="selectServer('Exness-Trial')">Exness-Trial</div>
+                                <div class="server-option" onclick="selectServer('Exness-MT5Real')">Exness-MT5Real</div>
                                 <div class="server-option" onclick="selectServer('XMGlobal-Real 01')">XMGlobal-Real 01</div>
+                                <div class="server-option" onclick="selectServer('XMGlobal-MT5')">XMGlobal-MT5</div>
+                                <div class="server-option" onclick="selectServer('Deriv-Server (Real)')">Deriv-Server (Real)</div>
+                                <div class="server-option" onclick="selectServer('DerivSVG-Server')">DerivSVG-Server</div>
+                                <div class="server-option" onclick="selectServer('FBS-Real')">FBS-Real</div>
+                                <div class="server-option" onclick="selectServer('ICMarketsSC-Live')">ICMarketsSC-Live</div>
                             </div>
                         </div>
                     </div>
@@ -226,7 +240,7 @@ app.get('/', (req, res) => {
                 });
 
                 searchInput.addEventListener('input', () => {
-                    const filter = searchInput.value.toLowerCase();
+                    const filter = searchInput.value.toLowerCase().trim();
                     dropdown.style.display = 'block';
                     options.forEach(opt => {
                         const text = opt.textContent.toLowerCase();
@@ -257,7 +271,7 @@ app.get('/', (req, res) => {
 // ================= PAGE 2: COMMAND CENTER DASHBOARD =================
 app.post('/dashboard', (req, res) => {
     const { login_id, server } = req.body;
-    botState.logs.unshift(`[AUTH] Successful handshake for ID: ${login_id || 'Mock-User'} on ${server || 'Deriv-Server'}`);
+    botState.logs.unshift(`[AUTH] Successful handshake for ID: ${login_id || 'Mock-User'} on Server: ${server || 'Exness-Real'}`);
     renderDashboard(req, res);
 });
 
@@ -268,10 +282,10 @@ app.get('/dashboard', (req, res) => {
 function renderDashboard(req, res) {
     if (req.query.action === 'run') {
         botState.running = true;
-        botState.logs.unshift(`[EXEC] Automated compounding sequence engaged.`);
+        botState.logs.unshift(`[EXEC] Live automated trading session engaged.`);
     } else if (req.query.action === 'stop') {
         botState.running = false;
-        botState.logs.unshift(`[SYSTEM] Trading halted by operator.`);
+        botState.logs.unshift(`[SYSTEM] Live trading halted by operator.`);
     }
 
     res.send(`
@@ -280,7 +294,7 @@ function renderDashboard(req, res) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>The GiantSlayer Bot AI - Command Center</title>
+            <title>GIANTSLAYER BOT AI - Command Center</title>
             <style>
                 * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
                 body {
@@ -392,7 +406,7 @@ function renderDashboard(req, res) {
             <div class="wrapper">
                 <div class="top-bar">
                     <div>
-                        <span style="font-size: 13px; font-weight: bold; color: #38bdf8; display: block;">🟢 THE GIANTSLAYER BOT AI</span>
+                        <span style="font-size: 13px; font-weight: bold; color: #38bdf8; display: block;">🟢 GIANTSLAYER BOT AI</span>
                         <span style="font-size: 10px; color: #64748b;">COMMAND CENTER</span>
                     </div>
                     <div class="top-right-group">
