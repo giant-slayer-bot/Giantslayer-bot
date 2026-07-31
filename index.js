@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>GiantSlayer Bot - Secure Login</title>
+            <title>Giant's Layer AI - Secure Login</title>
             <style>
                 * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
                 body {
@@ -49,30 +49,29 @@ app.get('/', (req, res) => {
                 }
                 .robot-banner {
                     width: 100%;
-                    height: 200px;
-                    border-r-radius: 16px;
+                    height: 220px;
                     border-radius: 16px;
-                    background: #000 url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
+                    background: #000 url('https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
                     position: relative;
                     margin-bottom: 20px;
                     border: 1px solid rgba(56, 189, 248, 0.3);
                     display: flex;
-                    align-items: flex-end;
+                    align-items: center;
                     justify-content: center;
-                    padding-bottom: 14px;
-                    box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
+                    box-shadow: inset 0 0 40px rgba(0,0,0,0.85);
                 }
-                .robot-banner::after {
-                    content: 'GIANT\\'S LAYER AI';
-                    font-size: 15px;
+                .banner-title {
+                    font-size: 18px;
                     font-weight: 900;
                     letter-spacing: 2.5px;
-                    color: #38bdf8;
-                    background: rgba(0, 0, 0, 0.88);
-                    padding: 6px 16px;
-                    border-radius: 20px;
-                    border: 1px solid rgba(56, 189, 248, 0.5);
-                    text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+                    color: #ffffff;
+                    background: rgba(0, 0, 0, 0.82);
+                    padding: 10px 20px;
+                    border-radius: 24px;
+                    border: 1px solid rgba(56, 189, 248, 0.6);
+                    text-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+                    text-align: center;
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
                 }
                 .section-title {
                     font-size: 14px;
@@ -133,7 +132,9 @@ app.get('/', (req, res) => {
         </head>
         <body>
             <div class="container">
-                <div class="robot-banner"></div>
+                <div class="robot-banner">
+                    <div class="banner-title">GIANT'S LAYER AI</div>
+                </div>
                 <div class="section-title">🔑 MT4 / MT5 Login Details</div>
                 
                 <form action="/dashboard" method="POST">
@@ -191,7 +192,7 @@ function renderDashboard(req, res) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>GiantSlayer Bot 2026 - Command Center</title>
+            <title>Giant's Layer AI - Command Center</title>
             <style>
                 * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
                 body {
@@ -280,7 +281,7 @@ function renderDashboard(req, res) {
                 .btn-run { background: #22c55e; color: #fff; }
                 .btn-stop { background: #991b1b; color: #fca5a5; }
                 .logs-box {
-                    background: **020617**;
+                    background: #020617;
                     border: 1px solid #1e293b;
                     border-radius: 10px;
                     padding: 10px;
@@ -303,7 +304,7 @@ function renderDashboard(req, res) {
             <div class="wrapper">
                 <div class="top-bar">
                     <div>
-                        <span style="font-size: 13px; font-weight: bold; color: #38bdf8; display: block;">🟢 GIANT\\'S LAYER BOT</span>
+                        <span style="font-size: 13px; font-weight: bold; color: #38bdf8; display: block;">🟢 GIANT'S LAYER AI</span>
                         <span style="font-size: 10px; color: #64748b;">COMMAND CENTER</span>
                     </div>
                     <div class="top-right-group">
@@ -342,7 +343,7 @@ function renderDashboard(req, res) {
                     </div>
                 </div>
 
-                <div class="btn-row">
+        <div class="btn-row">
                     <a href="/dashboard?action=run" class="btn btn-run">▶ Run Trades</a>
                     <a href="/dashboard?action=stop" class="btn btn-stop">■ Stop Trading</a>
                 </div>
