@@ -24,7 +24,7 @@ app.get('/', (req, res) => {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Giant's Layer AI - Secure Login</title>
+            <title>The GiantSlayer Bot AI - Secure Login</title>
             <style>
                 * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
                 body {
@@ -61,12 +61,12 @@ app.get('/', (req, res) => {
                     box-shadow: inset 0 0 40px rgba(0,0,0,0.85);
                 }
                 .banner-title {
-                    font-size: 21px;
+                    font-size: 18px;
                     font-weight: 900;
-                    letter-spacing: 2px;
+                    letter-spacing: 1.5px;
                     color: #ffffff;
                     background: rgba(0, 0, 0, 0.85);
-                    padding: 12px 22px;
+                    padding: 12px 18px;
                     border-radius: 24px;
                     border: 1px solid rgba(56, 189, 248, 0.7);
                     text-shadow: 0 0 15px rgba(56, 189, 248, 0.9);
@@ -94,7 +94,7 @@ app.get('/', (req, res) => {
                     margin-bottom: 5px;
                     text-align: center;
                 }
-                input, select {
+                input {
                     width: 100%;
                     background: #0b0f17;
                     border: 1px solid #1e293b;
@@ -105,19 +105,41 @@ app.get('/', (req, res) => {
                     outline: none;
                     text-align: center;
                 }
-                select {
-                    text-align-last: center;
-                }
                 input::placeholder {
                     text-align: center;
                 }
-                input:focus, select:focus {
+                input:focus {
                     border-color: #38bdf8;
                 }
-                select option {
+                .searchable-select-wrapper {
+                    position: relative;
+                    width: 100%;
+                }
+                .server-dropdown-list {
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    right: 0;
                     background: #0b0f17;
+                    border: 1px solid #38bdf8;
+                    border-radius: 0 0 10px 10px;
+                    max-height: 150px;
+                    overflow-y: auto;
+                    z-index: 99;
+                    display: none;
+                    margin-top: 2px;
+                }
+                .server-option {
+                    padding: 10px 14px;
+                    font-size: 13px;
                     color: #ffffff;
+                    cursor: pointer;
                     text-align: center;
+                    border-bottom: 1px solid rgba(255,255,255,0.05);
+                }
+                .server-option:hover {
+                    background: #1e293b;
+                    color: #38bdf8;
                 }
                 .divider {
                     height: 1px;
@@ -148,7 +170,7 @@ app.get('/', (req, res) => {
         <body>
             <div class="container">
                 <div class="robot-banner">
-                    <div class="banner-title">GIANT'S LAYER AI</div>
+                    <div class="banner-title">THE GIANTSLAYER BOT AI</div>
                 </div>
                 <div class="section-title">MT4/5 LOGIN DETAILS 🔑</div>
                 
@@ -165,17 +187,19 @@ app.get('/', (req, res) => {
 
                     <div class="form-group">
                         <label>Trading Server</label>
-                        <select name="server" required>
-                            <option value="" disabled selected>-- Select Trading Server --</option>
-                            <option value="Deriv-Server">Deriv-Server (Real)</option>
-                            <option value="Deriv-Demo">Deriv-Demo</option>
-                            <option value="DerivSVG-Server">DerivSVG-Server</option>
-                            <option value="FTMO-Server">FTMO-Server</option>
-                            <option value="FTMO-Demo">FTMO-Demo</option>
-                            <option value="Exness-Real1">Exness-Real1</option>
-                            <option value="Exness-Trial">Exness-Trial</option>
-                            <option value="XMGlobal-Real 01">XMGlobal-Real 01</option>
-                        </select>
+                        <div class="searchable-select-wrapper">
+                            <input type="text" id="serverSearch" name="server" placeholder="Type or search MT4/5 server..." autocomplete="off" required>
+                            <div id="serverDropdown" class="server-dropdown-list">
+                                <div class="server-option" onclick="selectServer('Deriv-Server (Real)')">Deriv-Server (Real)</div>
+                                <div class="server-option" onclick="selectServer('Deriv-Demo')">Deriv-Demo</div>
+                                <div class="server-option" onclick="selectServer('DerivSVG-Server')">DerivSVG-Server</div>
+                                <div class="server-option" onclick="selectServer('FTMO-Server')">FTMO-Server</div>
+                                <div class="server-option" onclick="selectServer('FTMO-Demo')">FTMO-Demo</div>
+                                <div class="server-option" onclick="selectServer('Exness-Real1')">Exness-Real1</div>
+                                <div class="server-option" onclick="selectServer('Exness-Trial')">Exness-Trial</div>
+                                <div class="server-option" onclick="selectServer('XMGlobal-Real 01')">XMGlobal-Real 01</div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="divider"></div>
@@ -191,6 +215,40 @@ app.get('/', (req, res) => {
 
                 <div class="footer-credit">created by official bakker_rsa</div>
             </div>
+
+            <script>
+                const searchInput = document.getElementById('serverSearch');
+                const dropdown = document.getElementById('serverDropdown');
+                const options = dropdown.querySelectorAll('.server-option');
+
+                searchInput.addEventListener('focus', () => {
+                    dropdown.style.display = 'block';
+                });
+
+                searchInput.addEventListener('input', () => {
+                    const filter = searchInput.value.toLowerCase();
+                    dropdown.style.display = 'block';
+                    options.forEach(opt => {
+                        const text = opt.textContent.toLowerCase();
+                        if (text.includes(filter)) {
+                            opt.style.display = 'block';
+                        } else {
+                            opt.style.display = 'none';
+                        }
+                    });
+                });
+
+                function selectServer(value) {
+                    searchInput.value = value;
+                    dropdown.style.display = 'none';
+                }
+
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.searchable-select-wrapper')) {
+                        dropdown.style.display = 'none';
+                    }
+                });
+            </script>
         </body>
         </html>
     `);
@@ -222,7 +280,7 @@ function renderDashboard(req, res) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Giant's Layer AI - Command Center</title>
+            <title>The GiantSlayer Bot AI - Command Center</title>
             <style>
                 * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
                 body {
@@ -334,7 +392,7 @@ function renderDashboard(req, res) {
             <div class="wrapper">
                 <div class="top-bar">
                     <div>
-                        <span style="font-size: 13px; font-weight: bold; color: #38bdf8; display: block;">🟢 GIANT'S LAYER AI</span>
+                        <span style="font-size: 13px; font-weight: bold; color: #38bdf8; display: block;">🟢 THE GIANTSLAYER BOT AI</span>
                         <span style="font-size: 10px; color: #64748b;">COMMAND CENTER</span>
                     </div>
                     <div class="top-right-group">
