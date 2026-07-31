@@ -84,6 +84,7 @@ app.get('/', (req, res) => {
                 }
                 .form-group {
                     margin-bottom: 14px;
+                    text-align: center;
                 }
                 label {
                     display: block;
@@ -93,7 +94,7 @@ app.get('/', (req, res) => {
                     margin-bottom: 5px;
                     text-align: center;
                 }
-                input, select {
+                input, select, datalist {
                     width: 100%;
                     background: #0b0f17;
                     border: 1px solid #1e293b;
@@ -104,13 +105,11 @@ app.get('/', (req, res) => {
                     outline: none;
                     text-align: center;
                 }
+                input::placeholder {
+                    text-align: center;
+                }
                 input:focus, select:focus {
                     border-color: #38bdf8;
-                }
-                select option {
-                    background: #0b0f17;
-                    color: #ffffff;
-                    text-align: left;
                 }
                 .divider {
                     height: 1px;
@@ -148,27 +147,27 @@ app.get('/', (req, res) => {
                 <form action="/dashboard" method="POST">
                     <div class="form-group">
                         <label>Login ID</label>
-                        <input type="text" name="login_id" placeholder="Enter account login ID" required>
+                        <input type="text" name="login_id" placeholder="Enter account login ID" style="text-align: center;" required>
                     </div>
                     
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" name="password" placeholder="Enter trading password" required>
+                        <input type="password" name="password" placeholder="Enter trading password" style="text-align: center;" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Trading Server</label>
-                        <select name="server" required>
-                            <option value="" disabled selected>Search or select MT4/MT5 server</option>
-                            <option value="Deriv-Server">Deriv-Server (Real)</option>
-                            <option value="Deriv-Demo">Deriv-Demo</option>
-                            <option value="DerivSVG-Server">DerivSVG-Server</option>
-                            <option value="FTMO-Server">FTMO-Server</option>
-                            <option value="FTMO-Demo">FTMO-Demo</option>
-                            <option value="Exness-Real1">Exness-Real1</option>
-                            <option value="Exness-Trial">Exness-Trial</option>
-                            <option value="XMGlobal-Real 01">XMGlobal-Real 01</option>
-                        </select>
+                        <label>Trading Server (Search or Select)</label>
+                        <input list="servers-list" name="server" placeholder="Type to search MT4/MT5 server..." autocomplete="off" required>
+                        <datalist id="servers-list">
+                            <option value="Deriv-Server">
+                            <option value="Deriv-Demo">
+                            <option value="DerivSVG-Server">
+                            <option value="FTMO-Server">
+                            <option value="FTMO-Demo">
+                            <option value="Exness-Real1">
+                            <option value="Exness-Trial">
+                            <option value="XMGlobal-Real 01">
+                        </datalist>
                     </div>
 
                     <div class="divider"></div>
@@ -176,7 +175,7 @@ app.get('/', (req, res) => {
                     <div class="section-title" style="font-size: 12px;">API Log In Details</div>
                     <div class="form-group">
                         <label>API Token / Key</label>
-                        <input type="password" name="api_token" placeholder="Enter fake or real API token" required>
+                        <input type="password" name="api_token" placeholder="Enter fake or real API token" style="text-align: center;" required>
                     </div>
 
                     <button type="submit" class="btn-connect" style="margin-top: 10px;">Connect & Enter Command Center →</button>
