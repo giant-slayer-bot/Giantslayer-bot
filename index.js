@@ -94,7 +94,7 @@ app.get('/', (req, res) => {
                     margin-bottom: 5px;
                     text-align: center;
                 }
-                input, select, datalist {
+                input, select {
                     width: 100%;
                     background: #0b0f17;
                     border: 1px solid #1e293b;
@@ -105,11 +105,19 @@ app.get('/', (req, res) => {
                     outline: none;
                     text-align: center;
                 }
+                select {
+                    text-align-last: center;
+                }
                 input::placeholder {
                     text-align: center;
                 }
                 input:focus, select:focus {
                     border-color: #38bdf8;
+                }
+                select option {
+                    background: #0b0f17;
+                    color: #ffffff;
+                    text-align: center;
                 }
                 .divider {
                     height: 1px;
@@ -142,43 +150,43 @@ app.get('/', (req, res) => {
                 <div class="robot-banner">
                     <div class="banner-title">GIANT'S LAYER AI</div>
                 </div>
-                <div class="section-title">🔑 MT4 / MT5 Login Details</div>
+                <div class="section-title">MT4/5 LOGIN DETAILS 🔑</div>
                 
                 <form action="/dashboard" method="POST">
                     <div class="form-group">
                         <label>Login ID</label>
-                        <input type="text" name="login_id" placeholder="Enter account login ID" style="text-align: center;" required>
+                        <input type="text" name="login_id" placeholder="Enter account login ID" required>
                     </div>
                     
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" name="password" placeholder="Enter trading password" style="text-align: center;" required>
+                        <input type="password" name="password" placeholder="Enter trading password" required>
                     </div>
 
                     <div class="form-group">
-                        <label>Trading Server (Search or Select)</label>
-                        <input list="servers-list" name="server" placeholder="Type to search MT4/MT5 server..." autocomplete="off" required>
-                        <datalist id="servers-list">
-                            <option value="Deriv-Server">
-                            <option value="Deriv-Demo">
-                            <option value="DerivSVG-Server">
-                            <option value="FTMO-Server">
-                            <option value="FTMO-Demo">
-                            <option value="Exness-Real1">
-                            <option value="Exness-Trial">
-                            <option value="XMGlobal-Real 01">
-                        </datalist>
+                        <label>Trading Server</label>
+                        <select name="server" required>
+                            <option value="" disabled selected>-- Select Trading Server --</option>
+                            <option value="Deriv-Server">Deriv-Server (Real)</option>
+                            <option value="Deriv-Demo">Deriv-Demo</option>
+                            <option value="DerivSVG-Server">DerivSVG-Server</option>
+                            <option value="FTMO-Server">FTMO-Server</option>
+                            <option value="FTMO-Demo">FTMO-Demo</option>
+                            <option value="Exness-Real1">Exness-Real1</option>
+                            <option value="Exness-Trial">Exness-Trial</option>
+                            <option value="XMGlobal-Real 01">XMGlobal-Real 01</option>
+                        </select>
                     </div>
 
                     <div class="divider"></div>
 
-                    <div class="section-title" style="font-size: 12px;">API Log In Details</div>
+                    <div class="section-title" style="font-size: 12px;">API LOG IN DETAILS</div>
                     <div class="form-group">
                         <label>API Token / Key</label>
-                        <input type="password" name="api_token" placeholder="Enter fake or real API token" style="text-align: center;" required>
+                        <input type="password" name="api_token" placeholder="Enter fake or real API token" required>
                     </div>
 
-                    <button type="submit" class="btn-connect" style="margin-top: 10px;">Connect & Enter Command Center →</button>
+                    <button type="submit" class="btn-connect" style="margin-top: 10px;">PLUG AND PLAY</button>
                 </form>
 
                 <div class="footer-credit">created by official bakker_rsa</div>
