@@ -49,28 +49,30 @@ app.get('/', (req, res) => {
                 }
                 .robot-banner {
                     width: 100%;
-                    height: 190px;
+                    height: 200px;
+                    border-r-radius: 16px;
                     border-radius: 16px;
-                    background: #000 url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
+                    background: #000 url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
                     position: relative;
                     margin-bottom: 20px;
                     border: 1px solid rgba(56, 189, 248, 0.3);
                     display: flex;
                     align-items: flex-end;
                     justify-content: center;
-                    padding-bottom: 12px;
+                    padding-bottom: 14px;
                     box-shadow: inset 0 0 30px rgba(0,0,0,0.8);
                 }
                 .robot-banner::after {
-                    content: 'GIANTSLAYER AI V2026';
-                    font-size: 10px;
-                    font-weight: 800;
-                    letter-spacing: 2px;
+                    content: 'GIANT\\'S LAYER AI';
+                    font-size: 15px;
+                    font-weight: 900;
+                    letter-spacing: 2.5px;
                     color: #38bdf8;
-                    background: rgba(0, 0, 0, 0.85);
-                    padding: 4px 12px;
+                    background: rgba(0, 0, 0, 0.88);
+                    padding: 6px 16px;
                     border-radius: 20px;
-                    border: 1px solid rgba(56, 189, 248, 0.4);
+                    border: 1px solid rgba(56, 189, 248, 0.5);
+                    text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
                 }
                 .section-title {
                     font-size: 14px;
@@ -120,6 +122,13 @@ app.get('/', (req, res) => {
                     cursor: pointer;
                     box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.5);
                 }
+                .footer-credit {
+                    text-align: center;
+                    margin-top: 18px;
+                    font-size: 11px;
+                    color: #64748b;
+                    letter-spacing: 0.5px;
+                }
             </style>
         </head>
         <body>
@@ -148,6 +157,8 @@ app.get('/', (req, res) => {
 
                     <button type="submit" class="btn-connect" style="margin-top: 10px;">Connect & Enter Command Center →</button>
                 </form>
+
+                <div class="footer-credit">created by official bakker_rsa</div>
             </div>
         </body>
         </html>
@@ -269,7 +280,7 @@ function renderDashboard(req, res) {
                 .btn-run { background: #22c55e; color: #fff; }
                 .btn-stop { background: #991b1b; color: #fca5a5; }
                 .logs-box {
-                    background: #020617;
+                    background: **020617**;
                     border: 1px solid #1e293b;
                     border-radius: 10px;
                     padding: 10px;
@@ -279,13 +290,20 @@ function renderDashboard(req, res) {
                     height: 130px;
                     overflow-y: auto;
                 }
+                .footer-credit {
+                    text-align: center;
+                    margin-top: 15px;
+                    font-size: 11px;
+                    color: #64748b;
+                    letter-spacing: 0.5px;
+                }
             </style>
         </head>
         <body>
             <div class="wrapper">
                 <div class="top-bar">
                     <div>
-                        <span style="font-size: 13px; font-weight: bold; color: #38bdf8; display: block;">🟢 GIANTSLAYER BOT</span>
+                        <span style="font-size: 13px; font-weight: bold; color: #38bdf8; display: block;">🟢 GIANT\\'S LAYER BOT</span>
                         <span style="font-size: 10px; color: #64748b;">COMMAND CENTER</span>
                     </div>
                     <div class="top-right-group">
@@ -335,6 +353,8 @@ function renderDashboard(req, res) {
                         ${botState.logs.join('<br>')}
                     </div>
                 </div>
+
+                <div class="footer-credit">created by official bakker_rsa</div>
             </div>
         </body>
         </html>
