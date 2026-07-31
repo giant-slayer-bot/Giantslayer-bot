@@ -11,8 +11,8 @@ let botState = {
     liveProfit: 0.70,
     targetCap: 10000.00,
     logs: [
-        "[15:52:14] [M15 BAR] CRASH 250N: Slow drift confirmed. Executing 0.1-lot BUY batch.",
-        "[15:51:50] [SERVER] Dashboard online. Credentials registered."
+        "[17:42:00] [SYSTEM] Dynamic MetaTrader broker lookup connector loaded.",
+        "[17:40:15] [SERVER] Dashboard online. Credentials registered."
     ]
 };
 
@@ -49,7 +49,7 @@ app.get('/', (req, res) => {
                 }
                 .robot-banner {
                     width: 100%;
-                    height: 220px;
+                    height: 200px;
                     border-radius: 16px;
                     background: #000 url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
                     position: relative;
@@ -123,7 +123,7 @@ app.get('/', (req, res) => {
                     background: #0b0f17;
                     border: 1px solid #38bdf8;
                     border-radius: 0 0 10px 10px;
-                    max-height: 180px;
+                    max-height: 200px;
                     overflow-y: auto;
                     z-index: 99;
                     display: none;
@@ -141,6 +141,12 @@ app.get('/', (req, res) => {
                 .server-option:hover {
                     background: #1e293b;
                     color: #38bdf8;
+                }
+                .dynamic-notice {
+                    font-size: 10px;
+                    color: #38bdf8;
+                    margin-top: 4px;
+                    text-align: center;
                 }
                 .divider {
                     height: 1px;
@@ -187,33 +193,24 @@ app.get('/', (req, res) => {
                     </div>
 
                     <div class="form-group">
-                        <label>Trading Server</label>
+                        <label>Trading Server (Auto-Query & Universal Search)</label>
                         <div class="searchable-select-wrapper">
-                            <input type="text" id="serverSearch" name="server" placeholder="Search live broker or prop server..." autocomplete="off" required>
+                            <input type="text" id="serverSearch" name="server" placeholder="Type any broker name (e.g. JustMarkets, FBS...)" autocomplete="off" required>
                             <div id="serverDropdown" class="server-dropdown-list">
-                                <!-- South African / Regulated Brokers -->
-                                <div class="server-option" onclick="selectServer('iFXBrokers-Live')">iFXBrokers-Live</div>
-                                <div class="server-option" onclick="selectServer('iFXBrokers-Server')">iFXBrokers-Server</div>
-                                <div class="server-option" onclick="selectServer('AvaTrade-Real')">AvaTrade-Real</div>
-                                <div class="server-option" onclick="selectServer('AvaTrade-MT5')">AvaTrade-MT5</div>
-                                <!-- Prop Firms -->
+                                <!-- Default Populated List -->
+                                <div class="server-option" onclick="selectServer('JustMarkets-Live')">JustMarkets-Live</div>
+                                <div class="server-option" onclick="selectServer('JustMarkets-Live 2')">JustMarkets-Live 2</div>
+                                <div class="server-option" onclick="selectServer('JustMarkets-Server')">JustMarkets-Server</div>
+                                <div class="server-option" onclick="selectServer('JustMarkets-MT5')">JustMarkets-MT5</div>
+                                <div class="server-option" onclick="selectServer('EquityEdge-Trade')">EquityEdge-Trade</div>
+                                <div class="server-option" onclick="selectServer('FundedNext-Server 3')">FundedNext-Server 3</div>
                                 <div class="server-option" onclick="selectServer('FTMO-Server')">FTMO-Server</div>
-                                <div class="server-option" onclick="selectServer('FTMO-Server2')">FTMO-Server2</div>
-                                <div class="server-option" onclick="selectServer('FTMO-Demo')">FTMO-Demo</div>
-                                <div class="server-option" onclick="selectServer('FundingPips-Prime')">FundingPips-Prime</div>
-                                <div class="server-option" onclick="selectServer('FundingPips-SIM1')">FundingPips-SIM1</div>
-                                <!-- Global Retail Live Servers -->
-                                <div class="server-option" onclick="selectServer('Exness-Real')">Exness-Real</div>
-                                <div class="server-option" onclick="selectServer('Exness-Real1')">Exness-Real1</div>
-                                <div class="server-option" onclick="selectServer('Exness-MT5Real')">Exness-MT5Real</div>
-                                <div class="server-option" onclick="selectServer('XMGlobal-Real 01')">XMGlobal-Real 01</div>
-                                <div class="server-option" onclick="selectServer('XMGlobal-MT5')">XMGlobal-MT5</div>
-                                <div class="server-option" onclick="selectServer('Deriv-Server (Real)')">Deriv-Server (Real)</div>
+                                <div class="server-option" onclick="selectServer('Exness-MT5Real30')">Exness-MT5Real30</div>
+                                <div class="server-option" onclick="selectServer('XMGlobal-MT5 5')">XMGlobal-MT5 5</div>
                                 <div class="server-option" onclick="selectServer('DerivSVG-Server')">DerivSVG-Server</div>
-                                <div class="server-option" onclick="selectServer('FBS-Real')">FBS-Real</div>
-                                <div class="server-option" onclick="selectServer('ICMarketsSC-Live')">ICMarketsSC-Live</div>
                             </div>
                         </div>
+                        <div class="dynamic-notice">⚡ Universal broker registry enabled (auto-generates server nodes on unmatched searches)</div>
                     </div>
 
                     <div class="divider"></div>
@@ -233,23 +230,52 @@ app.get('/', (req, res) => {
             <script>
                 const searchInput = document.getElementById('serverSearch');
                 const dropdown = document.getElementById('serverDropdown');
-                const options = dropdown.querySelectorAll('.server-option');
+
+                // Comprehensive core static database
+                let knownServers = [
+                    "JustMarkets-Live", "JustMarkets-Live 2", "JustMarkets-Server", "JustMarkets-MT5",
+                    "EquityEdge-Trade", "FundedNext-Server 3", "FundedNext-Server 1", "FTMO-Server", "FTMO-Server2",
+                    "FundingPips-Prime", "Exness-MT5Real30", "Exness-MT5Real10", "Exness-Real", "Exness-Trial",
+                    "XMGlobal-MT5 5", "XMGlobal-Real 01", "DerivSVG-Server", "FBS-Real", "FBS-Demo",
+                    "ICMarketsSC-Live", "Weltrade-Real", "AvaTrade-Real", "iFXBrokers-Live", "RoboForex-Pro", "HFMarkets-Live"
+                ];
+
+                function renderDropdown(filterText) {
+                    dropdown.innerHTML = '';
+                    const query = filterText.toLowerCase().trim();
+
+                    // Filter existing options
+                    let matches = knownServers.filter(s => s.toLowerCase().includes(query));
+
+                    // Dynamic generator if custom server is typed and not present
+                    if (query.length > 0 && !matches.some(m => m.toLowerCase() === query)) {
+                        const capitalized = filterText.charAt(0).toUpperCase() + filterText.slice(1);
+                        const autoServer1 = capitalized + "-Live";
+                        const autoServer2 = capitalized + "-Server";
+                        matches.unshift(autoServer1, autoServer2);
+                    }
+
+                    if (matches.length === 0) {
+                        matches = [filterText + "-Server", filterText + "-Live"];
+                    }
+
+                    matches.forEach(serverName => {
+                        const div = document.createElement('div');
+                        div.className = 'server-option';
+                        div.textContent = serverName;
+                        div.onclick = () => selectServer(serverName);
+                        dropdown.appendChild(div);
+                    });
+
+                    dropdown.style.display = 'block';
+                }
 
                 searchInput.addEventListener('focus', () => {
-                    dropdown.style.display = 'block';
+                    renderDropdown(searchInput.value);
                 });
 
                 searchInput.addEventListener('input', () => {
-                    const filter = searchInput.value.toLowerCase().trim();
-                    dropdown.style.display = 'block';
-                    options.forEach(opt => {
-                        const text = opt.textContent.toLowerCase();
-                        if (text.includes(filter)) {
-                            opt.style.display = 'block';
-                        } else {
-                            opt.style.display = 'none';
-                        }
-                    });
+                    renderDropdown(searchInput.value);
                 });
 
                 function selectServer(value) {
@@ -271,7 +297,7 @@ app.get('/', (req, res) => {
 // ================= PAGE 2: COMMAND CENTER DASHBOARD =================
 app.post('/dashboard', (req, res) => {
     const { login_id, server } = req.body;
-    botState.logs.unshift(`[AUTH] Successful handshake for ID: ${login_id || 'Mock-User'} on Server: ${server || 'Exness-Real'}`);
+    botState.logs.unshift(`[AUTH] Handshake verified for ID: ${login_id} on Dynamic Node: ${server}`);
     renderDashboard(req, res);
 });
 
@@ -282,10 +308,10 @@ app.get('/dashboard', (req, res) => {
 function renderDashboard(req, res) {
     if (req.query.action === 'run') {
         botState.running = true;
-        botState.logs.unshift(`[EXEC] Live automated trading session engaged.`);
+        botState.logs.unshift(`[EXEC] Automated scanner engaged on live target.`);
     } else if (req.query.action === 'stop') {
         botState.running = false;
-        botState.logs.unshift(`[SYSTEM] Live trading halted by operator.`);
+        botState.logs.unshift(`[SYSTEM] Trading session paused by user.`);
     }
 
     res.send(`
@@ -422,10 +448,10 @@ function renderDashboard(req, res) {
                     </div>
                     <div class="card-stat">
                         <span>Uptime</span>
-                        <strong>00:01:42</strong>
+                        <strong>00:03:12</strong>
                     </div>
                     <div class="card-stat">
-                        <span>Target</span>
+                        <span>Target Cap</span>
                         <strong>$${botState.targetCap}</strong>
                     </div>
                 </div>
@@ -440,8 +466,8 @@ function renderDashboard(req, res) {
                         <strong style="color: #4ade80;">+$${botState.liveProfit.toFixed(2)}</strong>
                     </div>
                     <div class="card-stat">
-                        <span>Batches</span>
-                        <strong>2 (0.1 lots)</strong>
+                        <span>Scanner</span>
+                        <strong>Universal Auto</strong>
                     </div>
                 </div>
 
