@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
                     width: 100%;
                     height: 220px;
                     border-radius: 16px;
-                    background: #000 url('https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
+                    background: #000 url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
                     position: relative;
                     margin-bottom: 20px;
                     border: 1px solid rgba(56, 189, 248, 0.3);
@@ -61,17 +61,17 @@ app.get('/', (req, res) => {
                     box-shadow: inset 0 0 40px rgba(0,0,0,0.85);
                 }
                 .banner-title {
-                    font-size: 18px;
+                    font-size: 21px;
                     font-weight: 900;
-                    letter-spacing: 2.5px;
+                    letter-spacing: 2px;
                     color: #ffffff;
-                    background: rgba(0, 0, 0, 0.82);
-                    padding: 10px 20px;
+                    background: rgba(0, 0, 0, 0.85);
+                    padding: 12px 22px;
                     border-radius: 24px;
-                    border: 1px solid rgba(56, 189, 248, 0.6);
-                    text-shadow: 0 0 12px rgba(56, 189, 248, 0.8);
+                    border: 1px solid rgba(56, 189, 248, 0.7);
+                    text-shadow: 0 0 15px rgba(56, 189, 248, 0.9);
                     text-align: center;
-                    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+                    box-shadow: 0 10px 25px rgba(0,0,0,0.6);
                 }
                 .section-title {
                     font-size: 14px;
@@ -80,6 +80,7 @@ app.get('/', (req, res) => {
                     margin-bottom: 14px;
                     text-transform: uppercase;
                     letter-spacing: 0.5px;
+                    text-align: center;
                 }
                 .form-group {
                     margin-bottom: 14px;
@@ -90,8 +91,9 @@ app.get('/', (req, res) => {
                     font-weight: 600;
                     color: #94a3b8;
                     margin-bottom: 5px;
+                    text-align: center;
                 }
-                input {
+                input, select {
                     width: 100%;
                     background: #0b0f17;
                     border: 1px solid #1e293b;
@@ -100,9 +102,15 @@ app.get('/', (req, res) => {
                     color: #ffffff;
                     font-size: 14px;
                     outline: none;
+                    text-align: center;
                 }
-                input:focus {
+                input:focus, select:focus {
                     border-color: #38bdf8;
+                }
+                select option {
+                    background: #0b0f17;
+                    color: #ffffff;
+                    text-align: left;
                 }
                 .divider {
                     height: 1px;
@@ -148,6 +156,21 @@ app.get('/', (req, res) => {
                         <input type="password" name="password" placeholder="Enter trading password" required>
                     </div>
 
+                    <div class="form-group">
+                        <label>Trading Server</label>
+                        <select name="server" required>
+                            <option value="" disabled selected>Search or select MT4/MT5 server</option>
+                            <option value="Deriv-Server">Deriv-Server (Real)</option>
+                            <option value="Deriv-Demo">Deriv-Demo</option>
+                            <option value="DerivSVG-Server">DerivSVG-Server</option>
+                            <option value="FTMO-Server">FTMO-Server</option>
+                            <option value="FTMO-Demo">FTMO-Demo</option>
+                            <option value="Exness-Real1">Exness-Real1</option>
+                            <option value="Exness-Trial">Exness-Trial</option>
+                            <option value="XMGlobal-Real 01">XMGlobal-Real 01</option>
+                        </select>
+                    </div>
+
                     <div class="divider"></div>
 
                     <div class="section-title" style="font-size: 12px;">API Log In Details</div>
@@ -168,8 +191,8 @@ app.get('/', (req, res) => {
 
 // ================= PAGE 2: COMMAND CENTER DASHBOARD =================
 app.post('/dashboard', (req, res) => {
-    const { login_id } = req.body;
-    botState.logs.unshift(`[AUTH] Successful handshake for ID: ${login_id || 'Mock-User'}`);
+    const { login_id, server } = req.body;
+    botState.logs.unshift(`[AUTH] Successful handshake for ID: ${login_id || 'Mock-User'} on ${server || 'Deriv-Server'}`);
     renderDashboard(req, res);
 });
 
@@ -343,7 +366,7 @@ function renderDashboard(req, res) {
                     </div>
                 </div>
 
-        <div class="btn-row">
+                <div class="btn-row">
                     <a href="/dashboard?action=run" class="btn btn-run">▶ Run Trades</a>
                     <a href="/dashboard?action=stop" class="btn btn-stop">■ Stop Trading</a>
                 </div>
