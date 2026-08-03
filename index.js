@@ -5,7 +5,6 @@ const PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// In-memory state for the trading bot
 let botState = {
     running: false,
     liveProfit: 1.42,
@@ -39,7 +38,6 @@ app.get('/', (req, res) => {
                     padding: 20px;
                     overflow-x: hidden;
                 }
-                /* Animated Glowing Border Container */
                 .glow-wrapper {
                     position: relative;
                     width: 100%;
@@ -459,7 +457,6 @@ function renderDashboard(req, res) {
                 .card-stat span { font-size: 9px; color: #94a3b8; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
                 .card-stat strong { font-size: 12px; color: #f8fafc; }
                 
-                /* Pulsing P&L Animation */
                 .profit-val {
                     color: #4ade80 !important;
                     text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
@@ -481,27 +478,33 @@ function renderDashboard(req, res) {
                 }
                 .strategy-selector {
                     display: flex;
-                    gap: 6px;
-                    margin-top: 6px;
+                    gap: 8px;
+                    margin-top: 8px;
                 }
                 .strat-btn {
                     flex: 1;
                     background: #04070e;
                     border: 1px solid #1e293b;
-                    border-radius: 8px;
-                    padding: 8px 4px;
-                    font-size: 10px;
-                    font-weight: bold;
+                    border-radius: 10px;
+                    padding: 12px 6px;
+                    font-size: 11px;
+                    font-weight: 700;
                     color: #94a3b8;
                     cursor: pointer;
                     text-align: center;
                     text-decoration: none;
+                    display: block;
+                    transition: all 0.2s ease;
+                    -webkit-tap-highlight-color: transparent;
                 }
                 .strat-btn.active {
                     background: rgba(56, 189, 248, 0.15);
                     border-color: #38bdf8;
                     color: #38bdf8;
-                    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+                    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+                }
+                .strat-btn:active {
+                    transform: scale(0.96);
                 }
 
                 .btn-row {
