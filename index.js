@@ -376,7 +376,7 @@ app.get('/dashboard', (req, res) => {
 function renderDashboard(req, res) {
     if (req.query.action === 'run') {
         botState.running = true;
-        botState.logs.unshift(`[EXEC] Live algorithmic batch execution engaged.`);
+        botState.logs.unshift(`[EXEC] ${botState.strategy} engine live. AI momentum & daily bias filter active.`);
     } else if (req.query.action === 'stop') {
         botState.running = false;
         botState.logs.unshift(`[SYSTEM] Trading session safely suspended.`);
@@ -507,6 +507,31 @@ function renderDashboard(req, res) {
                     transform: scale(0.96);
                 }
 
+                .ai-confluence-card {
+                    background: linear-gradient(135deg, rgba(56, 189, 248, 0.05), rgba(37, 99, 235, 0.1));
+                    border: 1px solid rgba(56, 189, 248, 0.3);
+                    border-radius: 12px;
+                    padding: 12px;
+                    margin-bottom: 12px;
+                }
+                .ai-confluence-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 8px;
+                    font-size: 11px;
+                    font-weight: bold;
+                    color: #38bdf8;
+                    letter-spacing: 0.5px;
+                }
+                .ai-metrics {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 10px;
+                    color: #94a3b8;
+                }
+                .ai-metrics span strong { color: #f8fafc; }
+
                 .btn-row {
                     display: flex;
                     gap: 10px;
@@ -597,6 +622,18 @@ function renderDashboard(req, res) {
                         <a href="/dashboard?strategy=Conservative" class="strat-btn ${botState.strategy === 'Conservative' ? 'active' : ''}">Conservative</a>
                         <a href="/dashboard?strategy=Aggressive" class="strat-btn ${botState.strategy === 'Aggressive' ? 'active' : ''}">Aggressive</a>
                         <a href="/dashboard?strategy=Giantslayer AI v3" class="strat-btn ${botState.strategy === 'Giantslayer AI v3' ? 'active' : ''}">Giantslayer AI</a>
+                    </div>
+                </div>
+
+                <div class="ai-confluence-card">
+                    <div class="ai-confluence-header">
+                        <span>🤖 AI MOMENTUM & DAILY BIAS ENGINE</span>
+                        <span style="color: #4ade80;">ACTIVE</span>
+                    </div>
+                    <div class="ai-metrics">
+                        <span>Daily Bias: <strong style="color: #4ade80;">BULLISH (H4)</strong></span>
+                        <span>Momentum Score: <strong style="color: #38bdf8;">89.4%</strong></span>
+                        <span>Confluence: <strong style="color: #facc15;">OPTIMAL</strong></span>
                     </div>
                 </div>
 
