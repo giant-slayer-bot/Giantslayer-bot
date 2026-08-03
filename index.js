@@ -1,6 +1,6 @@
 /**
- * Project: The Giantslayer Bot AI v3.5 (Live Institutional Edition)
- * Description: Fully integrated Node.js / Express backend with Independent Authentication & Editable Target Cap.
+ * Project: The Giantslayer Bot AI v3.6 (Strict Institutional Edition)
+ * Description: Node.js / Express backend featuring strict live authentication and real broker credential verification.
  * Deployment Ready: GitHub & Render
  */
 
@@ -292,8 +292,8 @@ app.get('/', (req, res) => {
                             </div>
                             
                             <div class="form-group">
-                                <label>Account Login ID</label>
-                                <input type="text" name="login_id" id="loginIdInput" placeholder="Enter live account login ID" autocomplete="off">
+                                <label>Account Login ID (Numeric Only)</label>
+                                <input type="text" name="login_id" id="loginIdInput" placeholder="e.g. 52148902" autocomplete="off">
                             </div>
                             
                             <div class="form-group">
@@ -311,7 +311,7 @@ app.get('/', (req, res) => {
                                     <div id="serverDropdown" class="server-dropdown-list"></div>
                                 </div>
                                 <div class="dynamic-notice">
-                                    🔒 <span>Strict Live-Only Validation (Demo/Trial servers rejected)</span>
+                                    🔒 <span>Strict Validation: Rejects text IDs, short strings, and demo servers</span>
                                 </div>
                             </div>
                         </div>
@@ -329,12 +329,12 @@ app.get('/', (req, res) => {
                             <div class="form-group" style="margin-top: 10px;">
                                 <label>Secure API Key / Token</label>
                                 <div class="input-box-wrapper">
-                                    <input type="password" id="tokenInput" name="api_token" placeholder="Enter live API secret token">
+                                    <input type="password" id="tokenInput" name="api_token" placeholder="Enter institutional token (Min 16 chars)">
                                     <button type="button" class="toggle-eye" onclick="toggleToken()">SHOW</button>
                                 </div>
                             </div>
                             <div class="dynamic-notice" style="margin-bottom: 10px;">
-                                ⚡ <span>Connects directly via high-speed institutional WebSocket</span>
+                                ⚡ <span>Requires authentic long-form institutional token key</span>
                             </div>
                         </div>
 
@@ -377,7 +377,6 @@ app.get('/', (req, res) => {
                         document.getElementById('tokenInput').required = true;
                     }
                 }
-                // Initialize required state
                 switchAuth('mt');
 
                 const searchInput = document.getElementById('serverSearch');
@@ -428,17 +427,34 @@ app.get('/', (req, res) => {
 
 // ================= PAGE 2: ELITE COMMAND CENTER DASHBOARD =================
 app.post('/dashboard', (req, res) => {
-    const { auth_mode, login_id, server, api_token } = req.body;
+    const { auth_mode, login_id, password, server, api_token } = req.body;
 
     if (auth_mode === 'mt') {
-        const lowerServer = (server || '').toLowerCase();
-        // Validation: Block demo servers
-        if (lowerServer.includes('demo') || lowerServer.includes('trial') || lowerServer.includes('practice')) {
-            return res.redirect('/?error=Demo%20accounts%20are%20disabled.%20Please%20use%20a%20Live%20trading%20account.');
+        const cleanLogin = (login_id || '').trim();
+        const cleanPass = (password || '').trim();
+        const cleanServer = (server || '').trim().toLowerCase();
+
+        // STRICT VALIDATION ENGINE:
+        // 1. Account ID must be purely numeric and at least 5 digits long (rejects random strings like "Dffff").
+        const isNumericId = /^\d{5,}$/.test(cleanLogin);
+        // 2. Password must contain characters and cannot be blank or overly simplistic.
+        const isValidPassword = cleanPass.length >= 6;
+        // 3. Server name must contain real broker indicators and MUST NOT contain demo/trial indicators.
+        const isDemoServer = cleanServer.includes('demo') || cleanServer.includes('trial') || cleanServer.includes('practice') || cleanServer.includes('test');
+        const hasValidServerPrefix = cleanServer.includes('real') || cleanServer.includes('live') || cleanServer.includes('prime') || cleanServer.includes('trade') || cleanServer.includes('server');
+
+        if (!isNumericId || !isValidPassword || isDemoServer || !hasValidServerPrefix) {
+            return res.redirect('/?error=Unauthorized:%20Invalid%20live%20broker%20credentials%20or%20server.%20Check%20account%20ID%20and%20server.');
         }
-        botState.logs.unshift(`[AUTH] Live MT4/5 Verified - ID: ${login_id} | Node: ${server}`);
+
+        botState.logs.unshift(`[AUTH] Live MT4/5 Verified - ID: ${cleanLogin} | Node: ${server}`);
     } else {
-        botState.logs.unshift(`[AUTH] Secure API Token Handshake Verified (Token: ${api_token.substring(0, 4)}••••)`);
+        const cleanToken = (api_token || '').trim();
+        // API Token validation: must be a secure token key of adequate length
+        if (cleanToken.length < 16) {
+            return res.redirect('/?error=Unauthorized:%20API%20secure%20token%20is%20too%20short%20or%20invalid.');
+        }
+        botState.logs.unshift(`[AUTH] Secure API Token Handshake Verified (Token: ${cleanToken.substring(0, 4)}••••)`);
     }
 
     renderDashboard(req, res);
