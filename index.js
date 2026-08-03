@@ -1,8 +1,7 @@
 /**
- * Project: The Giantslayer Bot AI v3.13 (Full Enterprise Production Script)
- * Description: Complete, end-to-end Node.js / Express backend with strict password validation, 
- * live broker account balance calculation, and full interactive command center dashboard.
- * Deployment Ready: GitHub & Render
+ * Project: The Giantslayer Bot AI v3.14 (Mobile Touch & Dropdown Fixed Build)
+ * Description: Node.js / Express backend with optimized mobile server selection layout,
+ * hardened validation, and live institutional command center.
  */
 
 const express = require('express');
@@ -49,7 +48,7 @@ app.get('/', (req, res) => {
                     flex-direction: column;
                     align-items: center;
                     justify-content: center;
-                    padding: 20px;
+                    padding: 16px;
                 }
                 .glow-wrapper {
                     position: relative;
@@ -62,20 +61,20 @@ app.get('/', (req, res) => {
                 }
                 .container {
                     width: 100%;
-                    background: rgba(6, 10, 18, 0.85);
+                    background: rgba(6, 10, 18, 0.92);
                     backdrop-filter: blur(30px);
                     -webkit-backdrop-filter: blur(30px);
                     border-radius: 27px;
-                    padding: 32px 26px;
+                    padding: 28px 22px;
                     border: 1px solid rgba(255, 255, 255, 0.04);
                 }
                 .robot-banner {
                     width: 100%;
-                    height: 160px;
+                    height: 140px;
                     border-radius: 18px;
                     background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(3,7,14,0.8)), url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
                     position: relative;
-                    margin-bottom: 20px;
+                    margin-bottom: 18px;
                     border: 1px solid rgba(56, 189, 248, 0.25);
                     display: flex;
                     align-items: center;
@@ -83,13 +82,12 @@ app.get('/', (req, res) => {
                     box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 12px 30px rgba(0,0,0,0.4);
                 }
                 .banner-title {
-                    font-size: 14px;
+                    font-size: 13px;
                     font-weight: 800;
                     letter-spacing: 3px;
                     color: #ffffff;
                     background: rgba(4, 7, 13, 0.85);
-                    backdrop-filter: blur(10px);
-                    padding: 10px 20px;
+                    padding: 8px 16px;
                     border-radius: 20px;
                     border: 1px solid rgba(56, 189, 248, 0.4);
                     text-shadow: 0 0 15px rgba(56, 189, 248, 0.8);
@@ -98,7 +96,7 @@ app.get('/', (req, res) => {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 12px;
+                    margin-bottom: 10px;
                 }
                 .section-title {
                     font-size: 11px;
@@ -132,13 +130,13 @@ app.get('/', (req, res) => {
                     50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 14px #4ade80; }
                     100% { transform: scale(0.95); opacity: 0.8; }
                 }
-                .form-group { margin-bottom: 14px; }
+                .form-group { margin-bottom: 12px; position: relative; }
                 label {
                     display: block;
                     font-size: 11px;
                     font-weight: 600;
                     color: #94a3b8;
-                    margin-bottom: 6px;
+                    margin-bottom: 5px;
                     letter-spacing: 0.5px;
                 }
                 .input-box-wrapper {
@@ -148,20 +146,20 @@ app.get('/', (req, res) => {
                 }
                 input {
                     width: 100%;
-                    background: rgba(3, 6, 12, 0.9);
+                    background: rgba(3, 6, 12, 0.95);
                     border: 1px solid rgba(255, 255, 255, 0.08);
                     border-radius: 14px;
-                    padding: 14px 16px;
+                    padding: 13px 15px;
                     color: #ffffff;
                     font-size: 13px;
                     font-family: 'JetBrains Mono', monospace;
                     outline: none;
-                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    transition: all 0.3s ease;
                 }
                 input::placeholder { font-family: 'Plus Jakarta Sans', sans-serif; color: #475569; }
                 input:focus {
                     border-color: #38bdf8;
-                    background: rgba(4, 8, 16, 0.95);
+                    background: rgba(4, 8, 16, 1);
                     box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
                 }
                 .toggle-eye {
@@ -177,34 +175,37 @@ app.get('/', (req, res) => {
                 }
                 .toggle-eye:hover { color: #38bdf8; }
                 .searchable-select-wrapper { position: relative; width: 100%; }
+                
+                /* Improved Mobile-First Dropdown Fix */
                 .server-dropdown-list {
                     position: absolute;
-                    top: calc(100% + 4px);
+                    bottom: calc(100% + 6px); /* Opens upwards so it doesn't get cut off by mobile keyboard/screen edges */
                     left: 0;
                     right: 0;
-                    background: rgba(6, 10, 18, 0.98);
-                    backdrop-filter: blur(20px);
-                    border: 1px solid rgba(56, 189, 248, 0.3);
+                    background: rgba(8, 14, 26, 0.98);
+                    backdrop-filter: blur(25px);
+                    border: 1px solid rgba(56, 189, 248, 0.4);
                     border-radius: 14px;
-                    max-height: 180px;
+                    max-height: 200px;
                     overflow-y: auto;
-                    z-index: 99;
+                    z-index: 999;
                     display: none;
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+                    box-shadow: 0 -15px 35px rgba(0,0,0,0.9);
                 }
                 .server-option {
-                    padding: 12px 16px;
-                    font-size: 12px;
+                    padding: 14px 16px;
+                    font-size: 13px;
                     font-family: 'JetBrains Mono', monospace;
-                    color: #cbd5e1;
+                    color: #e2e8f0;
                     cursor: pointer;
-                    border-bottom: 1px solid rgba(255,255,255,0.03);
+                    border-bottom: 1px solid rgba(255,255,255,0.04);
                 }
-                .server-option:hover { background: rgba(56, 189, 248, 0.1); color: #38bdf8; }
+                .server-option:active, .server-option:hover { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
+                
                 .dynamic-notice {
                     font-size: 10px;
                     color: #38bdf8;
-                    margin-top: 6px;
+                    margin-top: 5px;
                     display: flex;
                     align-items: center;
                     gap: 6px;
@@ -216,7 +217,7 @@ app.get('/', (req, res) => {
                     padding: 10px 14px;
                     border-radius: 12px;
                     font-size: 11px;
-                    margin-bottom: 16px;
+                    margin-bottom: 14px;
                     text-align: center;
                     font-weight: 600;
                 }
@@ -226,17 +227,15 @@ app.get('/', (req, res) => {
                     color: #ffffff;
                     border: none;
                     border-radius: 14px;
-                    padding: 16px;
+                    padding: 15px;
                     font-size: 14px;
                     font-weight: 700;
                     cursor: pointer;
                     box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5);
-                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                     letter-spacing: 1px;
-                    margin-top: 10px;
+                    margin-top: 8px;
                 }
-                .btn-connect:hover { transform: translateY(-2px); filter: brightness(1.1); }
-                .footer-credit { text-align: center; margin-top: 18px; font-size: 11px; color: #475569; letter-spacing: 1px; font-weight: 500; }
+                .footer-credit { text-align: center; margin-top: 14px; font-size: 11px; color: #475569; letter-spacing: 1px; font-weight: 500; }
             </style>
         </head>
         <body>
@@ -271,13 +270,14 @@ app.get('/', (req, res) => {
                         </div>
 
                         <div class="form-group">
-                            <label>Live Trading Server (Real Accounts Only)</label>
+                            <label>Live Trading Server (Select or Type)</label>
                             <div class="searchable-select-wrapper">
-                                <input type="text" id="serverSearch" name="server" placeholder="e.g. DerivSVG-Server" autocomplete="off" required>
+                                <!-- Dropdown rendered above input box to prevent mobile cutoff -->
                                 <div id="serverDropdown" class="server-dropdown-list"></div>
+                                <input type="text" id="serverSearch" name="server" placeholder="e.g. DerivSVG-Server" autocomplete="off" required>
                             </div>
                             <div class="dynamic-notice">
-                                🔒 <span>Strict Security: Rejects weak passwords, keyboard smashes ("asdddd"), and fake inputs</span>
+                                🔒 <span>Strict Security: Rejects weak passwords & keyboard smashes</span>
                             </div>
                         </div>
 
@@ -317,18 +317,29 @@ app.get('/', (req, res) => {
                         const div = document.createElement('div');
                         div.className = 'server-option';
                         div.textContent = serverName;
-                        div.onclick = () => selectServer(serverName);
+                        // Use touchend/mousedown for instant mobile responsiveness
+                        div.addEventListener('mousedown', (e) => {
+                            e.preventDefault();
+                            selectServer(serverName);
+                        });
+                        div.addEventListener('touchend', (e) => {
+                            e.preventDefault();
+                            selectServer(serverName);
+                        });
                         dropdown.appendChild(div);
                     });
-                    dropdown.style.display = 'block';
+                    dropdown.style.display = matches.length > 0 ? 'block' : 'none';
                 }
 
                 searchInput.addEventListener('focus', () => renderDropdown(searchInput.value));
                 searchInput.addEventListener('input', () => renderDropdown(searchInput.value));
+
                 function selectServer(value) {
                     searchInput.value = value;
                     dropdown.style.display = 'none';
+                    searchInput.blur();
                 }
+
                 document.addEventListener('click', (e) => {
                     if (!e.target.closest('.searchable-select-wrapper')) {
                         dropdown.style.display = 'none';
@@ -348,12 +359,9 @@ app.post('/dashboard', (req, res) => {
     const cleanPass = (password || '').trim();
     const cleanServer = (server || '').trim();
 
-    // 1. Validate Login ID format (must be numeric digits only, min 5 chars)
     const isLoginValid = /^\d{5,}$/.test(cleanLogin);
-
-    // 2. Strict Hardened Password Validation Engine (Blocks "asdddd", keyboard smashes, repeats, short strings)
     const lowerPass = cleanPass.toLowerCase();
-    const hasRepeatingChars = /(.)\1{2,}/.test(lowerPass); // Detects 3+ repeating characters in a row (e.g., "dddd", "1111")
+    const hasRepeatingChars = /(.)\1{2,}/.test(lowerPass);
     const isKeyboardSmash = lowerPass.startsWith('asd') || lowerPass.startsWith('qwe') || lowerPass.startsWith('zxc');
     const isTooShort = cleanPass.length < 6;
     const isWeakKeyword = ['password', '123456', '12345678', 'admin', 'test', 'qwerty'].includes(lowerPass);
@@ -362,11 +370,9 @@ app.post('/dashboard', (req, res) => {
         return res.redirect('/?error=Authentication%20Failed:%20Invalid%20Account%20ID%20or%20Weak/Fake%20Password%20Rejected.');
     }
 
-    // 3. Save session credentials upon passing verification
     botState.accountId = cleanLogin;
     botState.serverName = cleanServer;
 
-    // 4. Generate dynamic account balance based on login ID
     let numericSeed = parseInt(cleanLogin) || 248484;
     botState.accountBalance = parseFloat(((numericSeed % 8500) + 1250.75).toFixed(2));
 
@@ -467,16 +473,11 @@ app.get('/dashboard', (req, res) => {
                     border-radius: 14px;
                     padding: 12px 8px;
                     text-align: center;
-                    position: relative;
                 }
                 .card-stat span { font-size: 9px; color: #64748b; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
                 .card-stat strong { font-size: 13px; color: #f1f5f9; font-family: 'JetBrains Mono', monospace; font-weight: 600; }
                 .clickable-target { cursor: pointer; color: #38bdf8 !important; text-decoration: underline; text-decoration-style: dotted; }
-                
-                .profit-val {
-                    color: #4ade80 !important;
-                    text-shadow: 0 0 12px rgba(74, 222, 128, 0.35);
-                }
+                .profit-val { color: #4ade80 !important; text-shadow: 0 0 12px rgba(74, 222, 128, 0.35); }
                 .section-box {
                     background: rgba(6, 10, 18, 0.85);
                     backdrop-filter: blur(20px);
@@ -500,7 +501,6 @@ app.get('/dashboard', (req, res) => {
                     text-align: center;
                     text-decoration: none;
                     display: block;
-                    letter-spacing: 0.3px;
                 }
                 .strat-btn.active {
                     background: rgba(56, 189, 248, 0.12);
