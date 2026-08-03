@@ -1,8 +1,8 @@
 /**
- * Project: The Giantslayer Bot AI v6.0 (Unified Full Production Stack)
- * Description: Fully combined, production-ready Node.js Express server incorporating both 
- * the exact login interface (with blank/secure input fields) and the fully restored 
- * Command Center Dashboard matching your exact specifications and aesthetic.
+ * Project: The Giantslayer Bot AI v6.1 (iOS App Style & Blank Server Field)
+ * Description: Fully updated script implementing native Apple/iOS mobile app aesthetics 
+ * (glassmorphism cards, dynamic notch styling, native segmented controls) and clearing 
+ * the default trading server input to be completely blank.
  */
 
 const express = require('express');
@@ -45,11 +45,11 @@ function onCandle() {
 
 setInterval(onCandle, 4000);
 
-const baseStyles = `
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+const iosStyles = `
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Plus Jakarta Sans", sans-serif; -webkit-tap-highlight-color: transparent; }
     html, body {
-        background-color: #020408;
-        color: #f8fafc;
+        background-color: #000000;
+        color: #f5f5f7;
         width: 100vw;
         height: 100vh;
         overflow: hidden;
@@ -57,21 +57,28 @@ const baseStyles = `
         align-items: center;
         justify-content: center;
     }
-    .fullscreen-wrapper {
+    .app-container {
         width: 100%;
         height: 100%;
-        max-width: 480px;
+        max-width: 440px;
         max-height: 100vh;
-        background: rgba(6, 10, 18, 0.98);
+        background: #000000;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 6px 10px;
-        border: 1px solid rgba(255, 255, 255, 0.04);
+        padding: 10px 14px 14px 14px;
+        position: relative;
+    }
+    .ios-glass-card {
+        background: rgba(28, 28, 30, 0.75);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 14px;
     }
 `;
 
-// ================= PAGE 1: LOGIN GATEWAY (BLANK / SECURE FIELDS) =================
+// ================= PAGE 1: LOGIN GATEWAY (BLANK SERVER & iOS TOUCHES) =================
 app.get('/', (req, res) => {
     const errorMsg = req.query.error ? decodeURIComponent(req.query.error) : '';
     res.send(`
@@ -79,64 +86,67 @@ app.get('/', (req, res) => {
         <html lang="en">
         <head>
             <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-            <title>GIANTSLAYER BOT AI - Live Institutional Gateway</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+            <title>GIANTSLAYER BOT AI - Mobile Gateway</title>
             <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
             <style>
-                ${baseStyles}
-                .robot-banner {
+                ${iosStyles}
+                .hero-banner {
                     width: 100%;
-                    height: 110px;
-                    border-radius: 10px;
-                    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(3,7,14,0.85)), url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
+                    height: 130px;
+                    border-radius: 16px;
+                    background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
                     position: relative;
-                    border: 1px solid rgba(56, 189, 248, 0.25);
+                    border: 1px solid rgba(10, 132, 255, 0.3);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     flex-shrink: 0;
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
                 }
-                .banner-title {
+                .banner-pill {
                     font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #ffffff;
-                    background: rgba(4, 7, 13, 0.88); padding: 5px 12px; border-radius: 12px;
-                    border: 1px solid rgba(56, 189, 248, 0.4);
+                    background: rgba(28, 28, 30, 0.85); backdrop-filter: blur(10px);
+                    padding: 6px 16px; border-radius: 20px;
+                    border: 1px solid rgba(10, 132, 255, 0.4);
                 }
-                .form-content { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
+                .form-content { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 10px; }
                 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
-                .section-title { font-size: 10px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 1px; }
-                .node-badge { font-size: 8px; color: #4ade80; background: rgba(34,197,94,0.1); padding: 2px 6px; border-radius: 4px; border: 1px solid rgba(34,197,94,0.25); font-weight: 600; }
+                .section-title { font-size: 11px; font-weight: 700; color: #0a84ff; text-transform: uppercase; letter-spacing: 0.8px; }
+                .node-badge { font-size: 9px; color: #30d158; background: rgba(48, 209, 88, 0.15); padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(48, 209, 88, 0.3); font-weight: 600; }
                 
                 .form-group { position: relative; }
-                label { display: block; font-size: 9.5px; font-weight: 600; color: #94a3b8; margin-bottom: 3px; }
+                label { display: block; font-size: 10px; font-weight: 600; color: #8e8e93; margin-bottom: 4px; }
                 .input-box-wrapper { position: relative; display: flex; align-items: center; }
                 input {
-                    width: 100%; background: rgba(3, 6, 12, 0.98); border: 1px solid rgba(255, 255, 255, 0.08);
-                    border-radius: 6px; padding: 9px 10px; color: #ffffff; font-size: 11.5px; font-family: 'JetBrains Mono', monospace; outline: none;
+                    width: 100%; background: rgba(44, 44, 46, 0.8); border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 10px; padding: 12px 14px; color: #ffffff; font-size: 13px; font-family: 'JetBrains Mono', monospace; outline: none;
+                    transition: all 0.2s ease;
                 }
-                input:focus { border-color: #38bdf8; }
-                .toggle-eye { position: absolute; right: 10px; background: none; border: none; color: #64748b; cursor: pointer; font-size: 8.5px; font-weight: 700; }
+                input:focus { border-color: #0a84ff; background: rgba(44, 44, 46, 1); box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2); }
+                .toggle-eye { position: absolute; right: 12px; background: none; border: none; color: #0a84ff; cursor: pointer; font-size: 10px; font-weight: 700; }
                 .searchable-select-wrapper { position: relative; width: 100%; }
                 .server-dropdown-list {
-                    position: absolute; bottom: calc(100% + 2px); left: 0; right: 0;
-                    background: rgba(8, 14, 26, 0.99); border: 1px solid rgba(56, 189, 248, 0.4);
-                    border-radius: 6px; max-height: 110px; overflow-y: auto; z-index: 999; display: none;
+                    position: absolute; bottom: calc(100% + 4px); left: 0; right: 0;
+                    background: rgba(44, 44, 46, 0.98); backdrop-filter: blur(20px);
+                    border: 1px solid rgba(10, 132, 255, 0.4);
+                    border-radius: 12px; max-height: 130px; overflow-y: auto; z-index: 999; display: none;
                 }
-                .server-option { padding: 7px 10px; font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #e2e8f0; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.03); }
-                .server-option:hover { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
-                .dynamic-notice { font-size: 8.5px; color: #38bdf8; margin-top: 3px; font-weight: 500; }
-                .error-banner { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; padding: 5px 8px; border-radius: 6px; font-size: 9.5px; text-align: center; font-weight: 600; }
+                .server-option { padding: 9px 12px; font-size: 12px; font-family: 'JetBrains Mono', monospace; color: #f5f5f7; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
+                .server-option:hover { background: rgba(10, 132, 255, 0.25); color: #0a84ff; }
+                .error-banner { background: rgba(255, 69, 58, 0.15); border: 1px solid rgba(255, 69, 58, 0.3); color: #ff453a; padding: 8px 12px; border-radius: 10px; font-size: 10px; text-align: center; font-weight: 600; }
                 .btn-connect {
-                    width: 100%; background: linear-gradient(135deg, #0284c7, #2563eb); color: #ffffff; border: none;
-                    border-radius: 8px; padding: 11px; font-size: 11.5px; font-weight: 700; cursor: pointer;
-                    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35); margin-top: 4px;
+                    width: 100%; background: linear-gradient(135deg, #0a84ff, #005ec4); color: #ffffff; border: none;
+                    border-radius: 12px; padding: 13px; font-size: 13px; font-weight: 700; cursor: pointer;
+                    box-shadow: 0 4px 16px rgba(10, 132, 255, 0.4); margin-top: 6px;
                 }
-                .footer-credit { text-align: center; font-size: 8.5px; color: #475569; letter-spacing: 1px; font-weight: 500; flex-shrink: 0; }
+                .footer-credit { text-align: center; font-size: 9px; color: #636366; letter-spacing: 1px; font-weight: 500; flex-shrink: 0; padding-top: 4px; }
             </style>
         </head>
         <body>
-            <div class="fullscreen-wrapper">
-                <div class="robot-banner">
-                    <div class="banner-title">GIANTSLAYER BOT AI</div>
+            <div class="app-container">
+                <div class="hero-banner">
+                    <div class="banner-pill">GIANTSLAYER BOT AI</div>
                 </div>
 
                 ${errorMsg ? `<div class="error-banner">⚠️ ${errorMsg}</div>` : ''}
@@ -149,11 +159,11 @@ app.get('/', (req, res) => {
                     
                     <div class="form-group">
                         <label>Account Login ID (Numeric Only)</label>
-                        <input type="text" name="login_id" id="loginIdInput" placeholder="" value="" required>
+                        <input type="text" name="login_id" id="loginIdInput" placeholder="" value="" required autocomplete="off">
                     </div>
                     
                     <div class="form-group">
-                        <label>Trading Password (Strict Hardened Check)</label>
+                        <label>Trading Password</label>
                         <div class="input-box-wrapper">
                             <input type="password" id="passInput" name="password" placeholder="" value="" required>
                             <button type="button" class="toggle-eye" onclick="togglePass()">SHOW</button>
@@ -164,9 +174,9 @@ app.get('/', (req, res) => {
                         <label>Live Trading Server (Select or Type)</label>
                         <div class="searchable-select-wrapper">
                             <div id="serverDropdown" class="server-dropdown-list"></div>
-                            <input type="text" id="serverSearch" name="server" value="DerivSVG-Server" placeholder="e.g. DerivSVG-Server" required>
+                            <!-- Server field is now completely blank as requested -->
+                            <input type="text" id="serverSearch" name="server" value="" placeholder="" required autocomplete="off">
                         </div>
-                        <div class="dynamic-notice">🔒 Strict Security: Rejects weak passwords & keyboard smashes</div>
                     </div>
 
                     <button type="submit" class="btn-connect">CONNECT LIVE TERMINAL</button>
@@ -239,8 +249,8 @@ app.post('/dashboard', (req, res) => {
     const lowerPass = cleanPass.toLowerCase();
     const isWeakKeyword = ['password', '123456', '12345678', 'admin', 'test', 'qwerty', 'abc123'].includes(lowerPass);
 
-    if (!isLoginValid || isWeakKeyword || cleanPass.length < 6) {
-        return res.redirect('/?error=Authentication%20Failed:%20Invalid%20ID%20or%20Weak%20Password.');
+    if (!isLoginValid || isWeakKeyword || cleanPass.length < 6 || !cleanServer) {
+        return res.redirect('/?error=Authentication%20Failed:%20Missing%20Server%20or%20Invalid%20Credentials.');
     }
 
     botState.accountId = cleanLogin;
@@ -249,7 +259,7 @@ app.post('/dashboard', (req, res) => {
     res.redirect('/dashboard');
 });
 
-// ================= PAGE 2: COMMAND CENTER DASHBOARD (EXACT LAYOUT MATCH) =================
+// ================= PAGE 2: COMMAND CENTER DASHBOARD (iOS APP FEEL) =================
 app.get('/dashboard', (req, res) => {
     if (req.query.mode) {
         botState.strategyMode = req.query.mode;
@@ -268,117 +278,123 @@ app.get('/dashboard', (req, res) => {
         <html lang="en">
         <head>
             <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
             <title>GIANTSLAYER BOT AI - Command Center</title>
             <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
             <style>
-                ${baseStyles}
-                .top-bar {
-                    background: rgba(6, 10, 18, 0.95); border: 1px solid rgba(255, 255, 255, 0.06);
-                    border-radius: 8px; padding: 6px 10px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+                ${iosStyles}
+                .nav-bar {
+                    background: rgba(28, 28, 30, 0.85); backdrop-filter: blur(20px);
+                    border: 1px solid rgba(255, 255, 255, 0.08);
+                    border-radius: 14px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
                 }
                 .status-badge {
-                    font-size: 8.5px; font-weight: 700; padding: 3px 10px; border-radius: 6px;
-                    background: rgba(239, 68, 68, 0.12); color: #fca5a5;
-                    border: 1px solid rgba(239, 68, 68, 0.3); text-align: center; letter-spacing: 0.5px;
+                    font-size: 9px; font-weight: 700; padding: 4px 10px; border-radius: 8px;
+                    background: rgba(255, 69, 58, 0.15); color: #ff453a;
+                    border: 1px solid rgba(255, 69, 58, 0.3); text-align: center; letter-spacing: 0.5px;
                 }
-                .top-right-group { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
-                .btn-logout { background: rgba(239, 68, 68, 0.1); color: #fca5a5; padding: 2px 8px; border-radius: 4px; font-size: 7.5px; text-decoration: none; font-weight: 700; }
+                .nav-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+                .btn-logout { background: rgba(255, 69, 58, 0.15); color: #ff453a; padding: 3px 8px; border-radius: 6px; font-size: 8px; text-decoration: none; font-weight: 700; }
                 
-                .grid-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; flex-shrink: 0; }
-                .card-stat { background: rgba(6, 10, 18, 0.85); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 6px 4px; text-align: center; }
-                .card-stat span { font-size: 7px; color: #64748b; display: block; margin-bottom: 2px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
-                .card-stat strong { font-size: 10.5px; color: #f1f5f9; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
-                .profit-val { color: #4ade80 !important; }
-                
-                .section-box { background: rgba(6, 10, 18, 0.85); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 6px 10px; flex-shrink: 0; }
-                .mode-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-top: 4px; }
-                .mode-btn {
-                    background: rgba(3, 6, 12, 0.9); border: 1px solid rgba(255, 255, 255, 0.06);
-                    border-radius: 6px; padding: 6px 3px; font-size: 7px; font-weight: 700; color: #64748b;
-                    text-align: center; text-decoration: none; display: block; letter-spacing: 0.3px;
+                .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; flex-shrink: 0; }
+                .stat-box { 
+                    background: rgba(28, 28, 30, 0.75); backdrop-filter: blur(20px);
+                    border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 8px 6px; text-align: center; 
                 }
-                .mode-btn.active { background: rgba(56, 189, 248, 0.15); border-color: #38bdf8; color: #38bdf8; box-shadow: 0 0 6px rgba(56, 189, 248, 0.25); }
+                .stat-box span { font-size: 7.5px; color: #8e8e93; display: block; margin-bottom: 2px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.4px; }
+                .stat-box strong { font-size: 11px; color: #f5f5f7; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
+                .profit-val { color: #30d158 !important; }
                 
-                .info-card {
-                    background: linear-gradient(135deg, rgba(56, 189, 248, 0.05), rgba(37, 99, 235, 0.08));
-                    border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 8px; padding: 6px 10px; font-size: 8.5px; flex-shrink: 0;
+                .section-card { 
+                    background: rgba(28, 28, 30, 0.75); backdrop-filter: blur(20px);
+                    border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 8px 12px; flex-shrink: 0; 
                 }
-                .btn-row { display: flex; gap: 6px; flex-shrink: 0; }
-                .btn { flex: 1; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 10px; border: none; cursor: pointer; text-align: center; text-decoration: none; color: #fff; }
-                .btn-run { background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 4px 10px rgba(34, 197, 94, 0.35); }
-                .btn-stop { background: linear-gradient(135deg, #dc2626, #b91c1c); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.35); }
+                .segmented-control { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 6px; background: rgba(0, 0, 0, 0.4); padding: 3px; border-radius: 10px; }
+                .segment-btn {
+                    background: transparent; border: none; border-radius: 8px; padding: 7px 4px; font-size: 7.5px; font-weight: 700; color: #8e8e93;
+                    text-align: center; text-decoration: none; display: block; letter-spacing: 0.3px; transition: all 0.2s ease;
+                }
+                .segment-btn.active { background: rgba(10, 132, 255, 0.25); color: #0a84ff; border: 1px solid rgba(10, 132, 255, 0.4); box-shadow: 0 0 10px rgba(10, 132, 255, 0.2); }
                 
-                .logs-box { background: rgba(2, 4, 8, 0.95); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 6px; padding: 6px 8px; font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: #4ade80; height: 75px; overflow-y: auto; line-height: 1.3; }
-                .footer-credit { text-align: center; font-size: 8.5px; color: #475569; letter-spacing: 1px; flex-shrink: 0; }
+                .info-banner {
+                    background: linear-gradient(135deg, rgba(10, 132, 255, 0.1), rgba(0, 94, 196, 0.15));
+                    border: 1px solid rgba(10, 132, 255, 0.3); border-radius: 12px; padding: 8px 12px; font-size: 9px; flex-shrink: 0;
+                }
+                .action-row { display: flex; gap: 8px; flex-shrink: 0; }
+                .action-btn { flex: 1; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 11px; border: none; cursor: pointer; text-align: center; text-decoration: none; color: #fff; }
+                .btn-run { background: linear-gradient(135deg, #30d158, #248a3d); box-shadow: 0 4px 14px rgba(48, 209, 88, 0.35); }
+                .btn-stop { background: linear-gradient(135deg, #ff453a, #d70015); box-shadow: 0 4px 14px rgba(255, 69, 58, 0.35); }
+                
+                .terminal-logs { background: rgba(0, 0, 0, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 8px 10px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #30d158; height: 80px; overflow-y: auto; line-height: 1.35; }
+                .footer-credit { text-align: center; font-size: 9px; color: #636366; letter-spacing: 1px; flex-shrink: 0; }
             </style>
         </head>
         <body>
-            <div class="fullscreen-wrapper">
-                <div class="top-bar">
+            <div class="app-container">
+                <div class="nav-bar">
                     <div>
-                        <span style="font-size: 10.5px; font-weight: 800; color: #38bdf8; display: block; display: flex; align-items: center; gap: 4px;"><span style="width: 6px; height: 6px; background: #22c55e; border-radius: 50%; display: inline-block;"></span> GIANTSLAYER BOT AI</span>
-                        <span style="font-size: 7.5px; color: #64748b; font-weight: 600;">ID: ${botState.accountId || '248484'} | ${botState.serverName}</span>
+                        <span style="font-size: 11px; font-weight: 800; color: #0a84ff; display: flex; align-items: center; gap: 6px;"><span style="width: 7px; height: 7px; background: #30d158; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #30d158;"></span> GIANTSLAYER BOT AI</span>
+                        <span style="font-size: 8px; color: #8e8e93; font-weight: 600;">ID: ${botState.accountId || '248484'} | ${botState.serverName}</span>
                     </div>
-                    <div class="top-right-group">
+                    <div class="nav-right">
                         <span class="status-badge">STANDBY</span>
                         <a href="/" class="btn-logout">LOG OUT</a>
                     </div>
                 </div>
 
-                <div class="grid-stats">
-                    <div class="card-stat"><span>Core Strategy</span><strong style="color: #38bdf8; font-size: 8px;">15M Micro-Flip</strong></div>
-                    <div class="card-stat"><span>Target Cap</span><strong style="color: #38bdf8;">$${botState.targetCap.toLocaleString()}</strong></div>
-                    <div class="card-stat"><span>Active Mode</span><strong style="color: #facc15; font-size: 7.5px;">${botState.strategyMode}</strong></div>
+                <div class="stats-grid">
+                    <div class="stat-box"><span>Core Strategy</span><strong style="color: #0a84ff; font-size: 8.5px;">15M Micro-Flip</strong></div>
+                    <div class="stat-box"><span>Target Cap</span><strong style="color: #0a84ff;">$${botState.targetCap.toLocaleString()}</strong></div>
+                    <div class="stat-box"><span>Active Mode</span><strong style="color: #ffd60a; font-size: 8px;">${botState.strategyMode}</strong></div>
                 </div>
 
-                <div class="grid-stats">
-                    <div class="card-stat"><span>Balance</span><strong style="color: #38bdf8;">$${botState.accountBalance.toFixed(2)}</strong></div>
-                    <div class="card-stat"><span>Floating P&L</span><strong class="profit-val">+$${botState.liveProfit.toFixed(2)}</strong></div>
-                    <div class="card-stat"><span>Risk Profile</span><strong style="color: #4ade80;">Optimized</strong></div>
+                <div class="stats-grid">
+                    <div class="stat-box"><span>Balance</span><strong style="color: #0a84ff;">$${botState.accountBalance.toFixed(2)}</strong></div>
+                    <div class="stat-box"><span>Floating P&L</span><strong class="profit-val">+$${botState.liveProfit.toFixed(2)}</strong></div>
+                    <div class="stat-box"><span>Risk Profile</span><strong style="color: #30d158;">Optimized</strong></div>
                 </div>
 
-                <div class="section-box">
-                    <div style="font-size: 8.5px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px;">Execution Suite & Engine Switcher</div>
-                    <div class="mode-selector">
-                        <a href="/dashboard?mode=Boom+%26+Crash" class="mode-btn ${botState.strategyMode === 'Boom & Crash' ? 'active' : ''}">BOOM & CRASH</a>
-                        <a href="/dashboard?mode=Prop-Firm" class="mode-btn ${botState.strategyMode === 'Prop-Firm' ? 'active' : ''}">PROP-FIRM</a>
-                        <a href="/dashboard?mode=Multi-Scanner" class="mode-btn ${botState.strategyMode === 'Multi-Scanner' ? 'active' : ''}">MULTI SCANNER</a>
+                <div class="section-card">
+                    <div style="font-size: 9px; font-weight: 700; color: #0a84ff; text-transform: uppercase; letter-spacing: 0.5px;">Execution Suite & Engine Switcher</div>
+                    <div class="segmented-control">
+                        <a href="/dashboard?mode=Boom+%26+Crash" class="segment-btn ${botState.strategyMode === 'Boom & Crash' ? 'active' : ''}">BOOM & CRASH</a>
+                        <a href="/dashboard?mode=Prop-Firm" class="segment-btn ${botState.strategyMode === 'Prop-Firm' ? 'active' : ''}">PROP-FIRM</a>
+                        <a href="/dashboard?mode=Multi-Scanner" class="segment-btn ${botState.strategyMode === 'Multi-Scanner' ? 'active' : ''}">MULTI SCANNER</a>
                     </div>
                 </div>
 
                 ${botState.strategyMode === 'Boom & Crash' ? `
-                <div class="info-card">
-                    <div style="font-weight: 700; color: #38bdf8; margin-bottom: 2px;">⚡ Boom & Crash Spike Filter Active</div>
-                    <div style="color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 7.5px;">
+                <div class="info-banner">
+                    <div style="font-weight: 700; color: #0a84ff; margin-bottom: 2px;">⚡ Boom & Crash Spike Filter Active</div>
+                    <div style="color: #8e8e93; font-family: 'JetBrains Mono', monospace; font-size: 8px;">
                         Scanning M15 trends. Automatic spike-avoidance rules enforced (No trading directly into spikes).
                     </div>
                 </div>` : ''}
 
                 ${botState.strategyMode === 'Prop-Firm' ? `
-                <div class="info-card" style="border-color: rgba(245, 158, 11, 0.3); background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(37, 99, 235, 0.08));">
-                    <div style="font-weight: 700; color: #fbbf24; margin-bottom: 2px;">🛡️ Prop-Firm Strict Guardrails Active (&lt;4%)</div>
-                    <div style="color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 7.5px;">
+                <div class="info-banner" style="border-color: rgba(255, 159, 10, 0.4); background: linear-gradient(135deg, rgba(255, 159, 10, 0.1), rgba(10, 132, 255, 0.15));">
+                    <div style="font-weight: 700; color: #ff9f0a; margin-bottom: 2px;">🛡️ Prop-Firm Strict Guardrails Active (&lt;4%)</div>
+                    <div style="color: #8e8e93; font-family: 'JetBrains Mono', monospace; font-size: 8px;">
                         Daily drawdown limit enforced strictly within institutional parameters.
                     </div>
                 </div>` : ''}
 
                 ${botState.strategyMode === 'Multi-Scanner' ? `
-                <div class="info-card" style="border-color: rgba(34, 197, 94, 0.3); background: linear-gradient(135deg, rgba(34, 197, 94, 0.05), rgba(37, 99, 235, 0.08));">
-                    <div style="font-weight: 700; color: #4ade80; margin-bottom: 2px;">🌐 Multi-Asset Institutional Scanner Active</div>
-                    <div style="color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 7.5px;">
+                <div class="info-banner" style="border-color: rgba(48, 209, 88, 0.4); background: linear-gradient(135deg, rgba(48, 209, 88, 0.1), rgba(10, 132, 255, 0.15));">
+                    <div style="font-weight: 700; color: #30d158; margin-bottom: 2px;">🌐 Multi-Asset Institutional Scanner Active</div>
+                    <div style="color: #8e8e93; font-family: 'JetBrains Mono', monospace; font-size: 8px;">
                         Scanning Forex, Gold, Indices, and Synthetics simultaneously.
                     </div>
                 </div>` : ''}
 
-                <div class="btn-row">
-                    <a href="/dashboard?action=run" class="btn btn-run">▶ Run Micro-Flip</a>
-                    <a href="/dashboard?action=stop" class="btn btn-stop">■ Pause Bot</a>
+                <div class="action-row">
+                    <a href="/dashboard?action=run" class="action-btn btn-run">▶ Run Micro-Flip</a>
+                    <a href="/dashboard?action=stop" class="action-btn btn-stop">■ Pause Bot</a>
                 </div>
 
-                <div class="section-box" style="padding: 5px 8px;">
-                    <div style="font-size: 8.5px; font-weight: 700; color: #38bdf8; margin-bottom: 2px; text-transform: uppercase;">Real-Time 15M Terminal Logs</div>
-                    <div class="logs-box">${botState.logs.join('<br>')}</div>
+                <div class="section-card" style="padding: 6px 10px;">
+                    <div style="font-size: 9px; font-weight: 700; color: #0a84ff; margin-bottom: 3px; text-transform: uppercase;">Real-Time 15M Terminal Logs</div>
+                    <div class="terminal-logs">${botState.logs.join('<br>')}</div>
                 </div>
 
                 <div class="footer-credit">created by official bakker_rsa</div>
