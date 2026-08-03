@@ -1,6 +1,6 @@
 /**
- * Project: The Giantslayer Bot AI v3.1 (Elite Terminal Edition)
- * Description: Fully integrated Node.js / Express backend with Elite Login Gateway & Command Center Dashboard.
+ * Project: The Giantslayer Bot AI v3.2 (Elite Institutional Edition)
+ * Description: Fully integrated Node.js / Express backend with Luxury Glassmorphism & Cybernetic HUD.
  * Deployment Ready: GitHub & Render
  */
 
@@ -13,12 +13,12 @@ app.use(express.json());
 
 let botState = {
     running: false,
-    liveProfit: 1.42,
-    targetCap: 10000.00,
+    liveProfit: 14.82,
+    targetCap: 25000.00,
     strategy: 'Giantslayer AI v3',
     logs: [
-        "[19:02:10] [AI KERNEL] Strategy 'Giantslayer AI v3' locked on volatility matrix.",
-        "[19:00:04] [AUTH] Secure TLS handshake verified. Node operational."
+        "[19:02:10] [AI KERNEL] Strategy 'Giantslayer AI v3' locked on institutional liquidity pools.",
+        "[19:00:04] [AUTH] Secure TLS 1.3 handshake verified. Node operational."
     ]
 };
 
@@ -30,90 +30,90 @@ app.get('/', (req, res) => {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>GIANTSLAYER BOT AI - Elite Terminal</title>
+            <title>GIANTSLAYER BOT AI - Elite Institutional Gateway</title>
+            <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
             <style>
-                * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+                * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
                 body {
-                    background-color: #030508;
-                    color: #ffffff;
+                    background-color: #020408;
+                    background-image: 
+                        radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.08) 0%, transparent 60%),
+                        radial-gradient(circle at 100% 100%, rgba(37, 99, 235, 0.05) 0%, transparent 50%);
+                    color: #f8fafc;
                     min-height: 100vh;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                     justify-content: center;
                     padding: 20px;
-                    overflow-x: hidden;
                 }
                 .glow-wrapper {
                     position: relative;
                     width: 100%;
-                    max-width: 420px;
-                    border-radius: 26px;
-                    padding: 2px;
-                    background: linear-gradient(135deg, #38bdf8, #2563eb, #7c3aed, #38bdf8);
-                    background-size: 300% 300%;
-                    animation: borderGlow 6s ease infinite;
-                    box-shadow: 0 25px 60px -15px rgba(56, 189, 248, 0.25);
-                }
-                @keyframes borderGlow {
-                    0% { background-position: 0% 50%; }
-                    50% { background-position: 100% 50%; }
-                    100% { background-position: 0% 50%; }
+                    max-width: 440px;
+                    border-radius: 28px;
+                    padding: 1px;
+                    background: linear-gradient(135deg, rgba(56, 189, 248, 0.5), rgba(37, 99, 235, 0.2), rgba(124, 58, 237, 0.4));
+                    box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(56, 189, 248, 0.1);
                 }
                 .container {
                     width: 100%;
-                    background: rgba(8, 12, 20, 0.95);
-                    backdrop-filter: blur(25px);
-                    border-radius: 24px;
-                    padding: 28px;
+                    background: rgba(6, 10, 18, 0.85);
+                    backdrop-filter: blur(30px);
+                    -webkit-backdrop-filter: blur(30px);
+                    border-radius: 27px;
+                    padding: 32px 26px;
+                    border: 1px solid rgba(255, 255, 255, 0.04);
                 }
                 .robot-banner {
                     width: 100%;
-                    height: 200px;
-                    border-radius: 16px;
-                    background: #000 url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
+                    height: 180px;
+                    border-radius: 18px;
+                    background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(3,7,14,0.8)), url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
                     position: relative;
-                    margin-bottom: 20px;
-                    border: 1px solid rgba(56, 189, 248, 0.4);
+                    margin-bottom: 24px;
+                    border: 1px solid rgba(56, 189, 248, 0.25);
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    box-shadow: inset 0 0 50px rgba(0,0,0,0.9), 0 10px 30px rgba(0,0,0,0.5);
+                    box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 12px 30px rgba(0,0,0,0.4);
                 }
                 .banner-title {
-                    font-size: 17px;
-                    font-weight: 900;
-                    letter-spacing: 2px;
+                    font-size: 15px;
+                    font-weight: 800;
+                    letter-spacing: 3px;
                     color: #ffffff;
-                    background: rgba(5, 8, 15, 0.85);
-                    padding: 12px 20px;
-                    border-radius: 24px;
-                    border: 1px solid rgba(56, 189, 248, 0.7);
-                    text-shadow: 0 0 15px rgba(56, 189, 248, 0.9);
-                    box-shadow: 0 0 25px rgba(37, 99, 235, 0.4);
+                    background: rgba(4, 7, 13, 0.85);
+                    backdrop-filter: blur(10px);
+                    padding: 10px 22px;
+                    border-radius: 20px;
+                    border: 1px solid rgba(56, 189, 248, 0.4);
+                    text-shadow: 0 0 15px rgba(56, 189, 248, 0.8);
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
                 }
                 .section-header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 12px;
+                    margin-bottom: 14px;
                 }
                 .section-title {
-                    font-size: 13px;
+                    font-size: 11px;
                     font-weight: 700;
                     color: #38bdf8;
                     text-transform: uppercase;
-                    letter-spacing: 1px;
+                    letter-spacing: 1.5px;
                 }
                 .server-status-pill {
                     display: flex;
                     align-items: center;
                     gap: 6px;
                     font-size: 10px;
+                    font-weight: 600;
                     color: #4ade80;
-                    background: rgba(34, 197, 94, 0.1);
-                    padding: 3px 8px;
-                    border-radius: 10px;
+                    background: rgba(34, 197, 94, 0.08);
+                    padding: 4px 10px;
+                    border-radius: 12px;
                     border: 1px solid rgba(34, 197, 94, 0.2);
                 }
                 .ping-dot {
@@ -121,23 +121,23 @@ app.get('/', (req, res) => {
                     height: 6px;
                     background: #4ade80;
                     border-radius: 50%;
-                    box-shadow: 0 0 8px #4ade80;
+                    box-shadow: 0 0 10px #4ade80;
                     animation: pulseDot 2s infinite;
                 }
                 @keyframes pulseDot {
                     0% { transform: scale(0.95); opacity: 0.8; }
-                    50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 12px #4ade80; }
+                    50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 14px #4ade80; }
                     100% { transform: scale(0.95); opacity: 0.8; }
                 }
                 .form-group {
-                    margin-bottom: 14px;
+                    margin-bottom: 16px;
                 }
                 label {
                     display: block;
                     font-size: 11px;
                     font-weight: 600;
                     color: #94a3b8;
-                    margin-bottom: 5px;
+                    margin-bottom: 6px;
                     letter-spacing: 0.5px;
                 }
                 .input-box-wrapper {
@@ -147,18 +147,24 @@ app.get('/', (req, res) => {
                 }
                 input {
                     width: 100%;
-                    background: #04070e;
-                    border: 1px solid #1e293b;
-                    border-radius: 12px;
-                    padding: 13px 14px;
+                    background: rgba(3, 6, 12, 0.9);
+                    border: 1px solid rgba(255, 255, 255, 0.08);
+                    border-radius: 14px;
+                    padding: 14px 16px;
                     color: #ffffff;
-                    font-size: 14px;
+                    font-size: 13px;
+                    font-family: 'JetBrains Mono', monospace;
                     outline: none;
-                    transition: all 0.3s ease;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+                input::placeholder {
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    color: #475569;
                 }
                 input:focus {
                     border-color: #38bdf8;
-                    box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+                    background: rgba(4, 8, 16, 0.95);
+                    box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
                 }
                 .toggle-eye {
                     position: absolute;
@@ -167,8 +173,9 @@ app.get('/', (req, res) => {
                     border: none;
                     color: #64748b;
                     cursor: pointer;
-                    font-size: 12px;
-                    font-weight: bold;
+                    font-size: 10px;
+                    font-weight: 700;
+                    letter-spacing: 1px;
                 }
                 .toggle-eye:hover { color: #38bdf8; }
                 .searchable-select-wrapper {
@@ -177,67 +184,72 @@ app.get('/', (req, res) => {
                 }
                 .server-dropdown-list {
                     position: absolute;
-                    top: 100%;
+                    top: calc(100% + 4px);
                     left: 0;
                     right: 0;
-                    background: #060a12;
-                    border: 1px solid #38bdf8;
-                    border-radius: 0 0 12px 12px;
-                    max-height: 180px;
+                    background: rgba(6, 10, 18, 0.98);
+                    backdrop-filter: blur(20px);
+                    border: 1px solid rgba(56, 189, 248, 0.3);
+                    border-radius: 14px;
+                    max-height: 190px;
                     overflow-y: auto;
                     z-index: 99;
                     display: none;
-                    margin-top: 3px;
-                    box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+                    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
                 }
                 .server-option {
-                    padding: 11px 14px;
-                    font-size: 13px;
-                    color: #f1f5f9;
+                    padding: 12px 16px;
+                    font-size: 12px;
+                    font-family: 'JetBrains Mono', monospace;
+                    color: #cbd5e1;
                     cursor: pointer;
-                    border-bottom: 1px solid rgba(255,255,255,0.04);
+                    border-bottom: 1px solid rgba(255,255,255,0.03);
+                    transition: background 0.2s;
                 }
                 .server-option:hover {
-                    background: #1e293b;
+                    background: rgba(56, 189, 248, 0.1);
                     color: #38bdf8;
                 }
                 .dynamic-notice {
                     font-size: 10px;
                     color: #38bdf8;
-                    margin-top: 5px;
+                    margin-top: 6px;
                     display: flex;
                     align-items: center;
-                    gap: 4px;
+                    gap: 6px;
+                    opacity: 0.9;
                 }
                 .divider {
                     height: 1px;
-                    background: rgba(255, 255, 255, 0.08);
-                    margin: 16px 0;
+                    background: rgba(255, 255, 255, 0.06);
+                    margin: 18px 0;
                 }
                 .btn-connect {
                     width: 100%;
-                    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+                    background: linear-gradient(135deg, #0284c7, #2563eb);
                     color: #ffffff;
                     border: none;
-                    border-radius: 12px;
-                    padding: 15px;
-                    font-size: 15px;
+                    border-radius: 14px;
+                    padding: 16px;
+                    font-size: 14px;
                     font-weight: 700;
                     cursor: pointer;
-                    box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.6);
-                    transition: transform 0.2s ease, box-shadow 0.2s ease;
-                    letter-spacing: 0.5px;
+                    box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5);
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    letter-spacing: 1px;
                 }
                 .btn-connect:hover {
                     transform: translateY(-2px);
-                    box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.8);
+                    box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.7);
+                    filter: brightness(1.1);
                 }
                 .footer-credit {
                     text-align: center;
-                    margin-top: 18px;
+                    margin-top: 20px;
                     font-size: 11px;
-                    color: #64748b;
-                    letter-spacing: 0.8px;
+                    color: #475569;
+                    letter-spacing: 1px;
+                    font-weight: 500;
                 }
             </style>
         </head>
@@ -283,8 +295,8 @@ app.get('/', (req, res) => {
 
                         <div class="divider"></div>
 
-                        <div class="section-title" style="font-size: 11px; margin-bottom: 8px;">API TOKEN SECURITY</div>
-                        <div class="form-group">
+                        <div class="section-title" style="font-size: 10px; margin-bottom: 8px;">API TOKEN SECURITY</div>
+                        <div class="form-group" style="margin-bottom: 6px;">
                             <label>API Key / Token</label>
                             <div class="input-box-wrapper">
                                 <input type="password" id="tokenInput" name="api_token" placeholder="Enter secure API token" required>
@@ -292,7 +304,7 @@ app.get('/', (req, res) => {
                             </div>
                         </div>
 
-                        <button type="submit" class="btn-connect" style="margin-top: 6px;">PLUG AND PLAY</button>
+                        <button type="submit" class="btn-connect" style="margin-top: 10px;">PLUG AND PLAY</button>
                     </form>
 
                     <div class="footer-credit">created by official bakker_rsa</div>
@@ -382,10 +394,10 @@ app.get('/dashboard', (req, res) => {
 function renderDashboard(req, res) {
     if (req.query.action === 'run') {
         botState.running = true;
-        botState.logs.unshift(`[EXEC] ${botState.strategy} engine live. AI momentum & daily bias filter active.`);
+        botState.logs.unshift(`[EXEC] ${botState.strategy} engine live. Institutional volatility & order-block filter active.`);
     } else if (req.query.action === 'stop') {
         botState.running = false;
-        botState.logs.unshift(`[SYSTEM] Trading session safely suspended.`);
+        botState.logs.unshift(`[SYSTEM] Trading session safely suspended and secured.`);
     }
 
     res.send(`
@@ -395,28 +407,31 @@ function renderDashboard(req, res) {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>GIANTSLAYER BOT AI - Command Center</title>
+            <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
             <style>
-                * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+                * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
                 body {
-                    background-color: #030508;
-                    color: #ffffff;
+                    background-color: #020408;
+                    background-image: radial-gradient(circle at 50% 0%, rgba(14, 165, 233, 0.06) 0%, transparent 50%);
+                    color: #f8fafc;
                     min-height: 100vh;
-                    padding: 14px;
+                    padding: 16px 12px;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
                 }
-                .wrapper { width: 100%; max-width: 460px; }
+                .wrapper { width: 100%; max-width: 440px; }
                 .top-bar {
-                    background: #080c14;
-                    border: 1px solid #1e293b;
-                    border-radius: 16px;
-                    padding: 14px 16px;
+                    background: rgba(6, 10, 18, 0.85);
+                    backdrop-filter: blur(20px);
+                    border: 1px solid rgba(255, 255, 255, 0.06);
+                    border-radius: 20px;
+                    padding: 16px;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     margin-bottom: 12px;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                    box-shadow: 0 12px 30px rgba(0,0,0,0.5);
                 }
                 .top-right-group {
                     display: flex;
@@ -427,23 +442,25 @@ function renderDashboard(req, res) {
                 .status-badge {
                     font-size: 10px;
                     font-weight: 700;
-                    letter-spacing: 0.5px;
-                    background: ${botState.running ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.15)'};
-                    padding: 4px 10px;
-                    border-radius: 8px;
+                    letter-spacing: 0.8px;
+                    background: ${botState.running ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)'};
+                    padding: 5px 12px;
+                    border-radius: 10px;
                     color: ${botState.running ? '#4ade80' : '#fca5a5'};
                     border: 1px solid ${botState.running ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)'};
                 }
                 .btn-logout {
-                    background: rgba(239, 68, 68, 0.2);
+                    background: rgba(239, 68, 68, 0.1);
                     color: #fca5a5;
-                    border: 1px solid rgba(239, 68, 68, 0.4);
+                    border: 1px solid rgba(239, 68, 68, 0.25);
                     border-radius: 8px;
                     padding: 4px 10px;
-                    font-size: 10px;
-                    font-weight: bold;
+                    font-size: 9px;
+                    font-weight: 700;
                     cursor: pointer;
                     text-decoration: none;
+                    letter-spacing: 0.5px;
+                    transition: background 0.2s;
                 }
                 .btn-logout:hover { background: #ef4444; color: #fff; }
                 
@@ -451,21 +468,22 @@ function renderDashboard(req, res) {
                     display: grid;
                     grid-template-columns: repeat(3, 1fr);
                     gap: 8px;
-                    margin-bottom: 10px;
+                    margin-bottom: 8px;
                 }
                 .card-stat {
-                    background: #080c14;
-                    border: 1px solid #1e293b;
-                    border-radius: 12px;
-                    padding: 11px 8px;
+                    background: rgba(6, 10, 18, 0.8);
+                    backdrop-filter: blur(15px);
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    border-radius: 14px;
+                    padding: 12px 8px;
                     text-align: center;
                 }
-                .card-stat span { font-size: 9px; color: #94a3b8; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
-                .card-stat strong { font-size: 12px; color: #f8fafc; }
+                .card-stat span { font-size: 9px; color: #64748b; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
+                .card-stat strong { font-size: 13px; color: #f1f5f9; font-family: 'JetBrains Mono', monospace; font-weight: 600; }
                 
                 .profit-val {
                     color: #4ade80 !important;
-                    text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+                    text-shadow: 0 0 12px rgba(74, 222, 128, 0.35);
                     animation: pulseProfit 3s infinite ease-in-out;
                 }
                 @keyframes pulseProfit {
@@ -475,49 +493,49 @@ function renderDashboard(req, res) {
                 }
 
                 .section-box {
-                    background: #080c14;
-                    border: 1px solid #1e293b;
-                    border-radius: 14px;
-                    padding: 14px;
+                    background: rgba(6, 10, 18, 0.85);
+                    backdrop-filter: blur(20px);
+                    border: 1px solid rgba(255, 255, 255, 0.06);
+                    border-radius: 18px;
+                    padding: 16px;
                     margin-bottom: 12px;
-                    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                    box-shadow: 0 12px 30px rgba(0,0,0,0.5);
                 }
                 .strategy-selector {
                     display: flex;
                     gap: 8px;
-                    margin-top: 8px;
+                    margin-top: 10px;
                 }
                 .strat-btn {
                     flex: 1;
-                    background: #04070e;
-                    border: 1px solid #1e293b;
-                    border-radius: 10px;
-                    padding: 12px 6px;
-                    font-size: 11px;
+                    background: rgba(3, 6, 12, 0.9);
+                    border: 1px solid rgba(255, 255, 255, 0.06);
+                    border-radius: 12px;
+                    padding: 12px 4px;
+                    font-size: 10px;
                     font-weight: 700;
-                    color: #94a3b8;
+                    color: #64748b;
                     cursor: pointer;
                     text-align: center;
                     text-decoration: none;
                     display: block;
-                    transition: all 0.2s ease;
+                    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
                     -webkit-tap-highlight-color: transparent;
+                    letter-spacing: 0.3px;
                 }
                 .strat-btn.active {
-                    background: rgba(56, 189, 248, 0.15);
+                    background: rgba(56, 189, 248, 0.12);
                     border-color: #38bdf8;
                     color: #38bdf8;
-                    box-shadow: 0 0 12px rgba(56, 189, 248, 0.3);
+                    box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
                 }
-                .strat-btn:active {
-                    transform: scale(0.96);
-                }
+                .strat-btn:active { transform: scale(0.96); }
 
                 .ai-confluence-card {
-                    background: linear-gradient(135deg, rgba(56, 189, 248, 0.05), rgba(37, 99, 235, 0.1));
+                    background: linear-gradient(135deg, rgba(56, 189, 248, 0.06), rgba(37, 99, 235, 0.12));
                     border: 1px solid rgba(56, 189, 248, 0.3);
-                    border-radius: 12px;
-                    padding: 12px;
+                    border-radius: 16px;
+                    padding: 14px;
                     margin-bottom: 12px;
                 }
                 .ai-confluence-header {
@@ -526,7 +544,7 @@ function renderDashboard(req, res) {
                     align-items: center;
                     margin-bottom: 8px;
                     font-size: 11px;
-                    font-weight: bold;
+                    font-weight: 700;
                     color: #38bdf8;
                     letter-spacing: 0.5px;
                 }
@@ -534,9 +552,10 @@ function renderDashboard(req, res) {
                     display: flex;
                     justify-content: space-between;
                     font-size: 10px;
-                    color: #94a3b8;
+                    color: #64748b;
+                    font-family: 'JetBrains Mono', monospace;
                 }
-                .ai-metrics span strong { color: #f8fafc; }
+                .ai-metrics span strong { color: #f1f5f9; font-weight: 600; }
 
                 .btn-row {
                     display: flex;
@@ -545,37 +564,49 @@ function renderDashboard(req, res) {
                 }
                 .btn {
                     flex: 1;
-                    padding: 14px;
-                    border-radius: 12px;
-                    font-weight: bold;
+                    padding: 15px;
+                    border-radius: 14px;
+                    font-weight: 700;
                     font-size: 13px;
                     border: none;
                     cursor: pointer;
                     text-align: center;
                     text-decoration: none;
-                    letter-spacing: 0.5px;
+                    letter-spacing: 0.8px;
+                    transition: all 0.25s ease;
                 }
-                .btn-run { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; box-shadow: 0 8px 20px rgba(34, 197, 94, 0.4); }
-                .btn-stop { background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4); }
+                .btn-run { 
+                    background: linear-gradient(135deg, #16a34a, #15803d); 
+                    color: #fff; 
+                    box-shadow: 0 10px 25px rgba(34, 197, 94, 0.35); 
+                }
+                .btn-run:hover { filter: brightness(1.1); transform: translateY(-1px); }
+                .btn-stop { 
+                    background: linear-gradient(135deg, #dc2626, #b91c1c); 
+                    color: #fff; 
+                    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.35); 
+                }
+                .btn-stop:hover { filter: brightness(1.1); transform: translateY(-1px); }
                 
                 .logs-box {
-                    background: #020409;
-                    border: 1px solid #1e293b;
-                    border-radius: 10px;
-                    padding: 10px;
-                    font-family: monospace;
-                    font-size: 11px;
+                    background: rgba(2, 4, 8, 0.95);
+                    border: 1px solid rgba(255, 255, 255, 0.06);
+                    border-radius: 12px;
+                    padding: 12px;
+                    font-family: 'JetBrains Mono', monospace;
+                    font-size: 10.5px;
                     color: #4ade80;
-                    height: 120px;
+                    height: 130px;
                     overflow-y: auto;
-                    line-height: 1.4;
+                    line-height: 1.5;
                 }
                 .footer-credit {
                     text-align: center;
-                    margin-top: 15px;
+                    margin-top: 14px;
                     font-size: 11px;
-                    color: #64748b;
-                    letter-spacing: 0.8px;
+                    color: #475569;
+                    letter-spacing: 1px;
+                    font-weight: 500;
                 }
             </style>
         </head>
@@ -583,8 +614,8 @@ function renderDashboard(req, res) {
             <div class="wrapper">
                 <div class="top-bar">
                     <div>
-                        <span style="font-size: 13px; font-weight: bold; color: #38bdf8; display: block; letter-spacing: 0.5px;">🟢 GIANTSLAYER BOT AI</span>
-                        <span style="font-size: 10px; color: #64748b; letter-spacing: 0.5px;">COMMAND CENTER</span>
+                        <span style="font-size: 13px; font-weight: 800; color: #38bdf8; display: block; letter-spacing: 0.5px;">🟢 GIANTSLAYER BOT AI</span>
+                        <span style="font-size: 9px; color: #64748b; letter-spacing: 1px; font-weight: 600;">COMMAND CENTER</span>
                     </div>
                     <div class="top-right-group">
                         <span class="status-badge">${botState.running ? 'ONLINE & RUNNING' : 'STANDBY MODE'}</span>
@@ -603,7 +634,7 @@ function renderDashboard(req, res) {
                     </div>
                     <div class="card-stat">
                         <span>Target Cap</span>
-                        <strong>$${botState.targetCap}</strong>
+                        <strong>$${botState.targetCap.toLocaleString()}</strong>
                     </div>
                 </div>
 
@@ -623,7 +654,7 @@ function renderDashboard(req, res) {
                 </div>
 
                 <div class="section-box">
-                    <div style="font-size: 11px; font-weight: bold; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px;">AI Strategy Tuning</div>
+                    <div style="font-size: 11px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 1px;">AI Strategy Tuning</div>
                     <div class="strategy-selector">
                         <a href="/dashboard?strategy=Conservative" class="strat-btn ${botState.strategy === 'Conservative' ? 'active' : ''}">Conservative</a>
                         <a href="/dashboard?strategy=Aggressive" class="strat-btn ${botState.strategy === 'Aggressive' ? 'active' : ''}">Aggressive</a>
@@ -637,8 +668,8 @@ function renderDashboard(req, res) {
                         <span style="color: #4ade80;">ACTIVE</span>
                     </div>
                     <div class="ai-metrics">
-                        <span>Daily Bias: <strong style="color: #4ade80;">BULLISH (H4)</strong></span>
-                        <span>Momentum Score: <strong style="color: #38bdf8;">89.4%</strong></span>
+                        <span>Bias: <strong style="color: #4ade80;">BULLISH (H4)</strong></span>
+                        <span>Score: <strong style="color: #38bdf8;">89.4%</strong></span>
                         <span>Confluence: <strong style="color: #facc15;">OPTIMAL</strong></span>
                     </div>
                 </div>
@@ -649,7 +680,7 @@ function renderDashboard(req, res) {
                 </div>
 
                 <div class="section-box">
-                    <div style="font-size: 11px; font-weight: bold; color: #38bdf8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Real-Time Terminal Logs</div>
+                    <div style="font-size: 11px; font-weight: 700; color: #38bdf8; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">Real-Time Terminal Logs</div>
                     <div class="logs-box">
                         ${botState.logs.join('<br>')}
                     </div>
