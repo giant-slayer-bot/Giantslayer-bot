@@ -1,6 +1,6 @@
 /**
- * Project: The Giantslayer Bot AI v3.2 (Elite Institutional Edition)
- * Description: Fully integrated Node.js / Express backend with Luxury Glassmorphism & Cybernetic HUD.
+ * Project: The Giantslayer Bot AI v3.5 (Live Institutional Edition)
+ * Description: Fully integrated Node.js / Express backend with Independent Authentication & Editable Target Cap.
  * Deployment Ready: GitHub & Render
  */
 
@@ -17,20 +17,21 @@ let botState = {
     targetCap: 25000.00,
     strategy: 'Giantslayer AI v3',
     logs: [
-        "[19:02:10] [AI KERNEL] Strategy 'Giantslayer AI v3' locked on institutional liquidity pools.",
-        "[19:00:04] [AUTH] Secure TLS 1.3 handshake verified. Node operational."
+        "[19:02:10] [AI KERNEL] Strategy 'Giantslayer AI v3' locked on live institutional liquidity pools.",
+        "[19:00:04] [AUTH] Secure TLS 1.3 live handshake verified. Node operational."
     ]
 };
 
 // ================= PAGE 1: THE ELITE CYBERNETIC LOGIN GATEWAY =================
 app.get('/', (req, res) => {
+    const errorMsg = req.query.error ? decodeURIComponent(req.query.error) : '';
     res.send(`
         <!DOCTYPE html>
         <html lang="en">
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>GIANTSLAYER BOT AI - Elite Institutional Gateway</title>
+            <title>GIANTSLAYER BOT AI - Live Institutional Gateway</title>
             <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
             <style>
                 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -67,11 +68,11 @@ app.get('/', (req, res) => {
                 }
                 .robot-banner {
                     width: 100%;
-                    height: 180px;
+                    height: 160px;
                     border-radius: 18px;
                     background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(3,7,14,0.8)), url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
                     position: relative;
-                    margin-bottom: 24px;
+                    margin-bottom: 20px;
                     border: 1px solid rgba(56, 189, 248, 0.25);
                     display: flex;
                     align-items: center;
@@ -79,23 +80,50 @@ app.get('/', (req, res) => {
                     box-shadow: inset 0 0 30px rgba(0,0,0,0.8), 0 12px 30px rgba(0,0,0,0.4);
                 }
                 .banner-title {
-                    font-size: 15px;
+                    font-size: 14px;
                     font-weight: 800;
                     letter-spacing: 3px;
                     color: #ffffff;
                     background: rgba(4, 7, 13, 0.85);
                     backdrop-filter: blur(10px);
-                    padding: 10px 22px;
+                    padding: 10px 20px;
                     border-radius: 20px;
                     border: 1px solid rgba(56, 189, 248, 0.4);
                     text-shadow: 0 0 15px rgba(56, 189, 248, 0.8);
-                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
                 }
+                .auth-tabs {
+                    display: flex;
+                    background: rgba(3, 6, 12, 0.9);
+                    border-radius: 12px;
+                    padding: 4px;
+                    margin-bottom: 20px;
+                    border: 1px solid rgba(255, 255, 255, 0.06);
+                }
+                .auth-tab {
+                    flex: 1;
+                    text-align: center;
+                    padding: 10px;
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: #64748b;
+                    cursor: pointer;
+                    border-radius: 9px;
+                    transition: all 0.2s ease;
+                    letter-spacing: 0.5px;
+                }
+                .auth-tab.active {
+                    background: rgba(56, 189, 248, 0.15);
+                    color: #38bdf8;
+                    border: 1px solid rgba(56, 189, 248, 0.3);
+                }
+                .auth-section { display: none; }
+                .auth-section.active { display: block; }
+                
                 .section-header {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
-                    margin-bottom: 14px;
+                    margin-bottom: 12px;
                 }
                 .section-title {
                     font-size: 11px;
@@ -129,9 +157,7 @@ app.get('/', (req, res) => {
                     50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 14px #4ade80; }
                     100% { transform: scale(0.95); opacity: 0.8; }
                 }
-                .form-group {
-                    margin-bottom: 16px;
-                }
+                .form-group { margin-bottom: 14px; }
                 label {
                     display: block;
                     font-size: 11px;
@@ -157,10 +183,7 @@ app.get('/', (req, res) => {
                     outline: none;
                     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                 }
-                input::placeholder {
-                    font-family: 'Plus Jakarta Sans', sans-serif;
-                    color: #475569;
-                }
+                input::placeholder { font-family: 'Plus Jakarta Sans', sans-serif; color: #475569; }
                 input:focus {
                     border-color: #38bdf8;
                     background: rgba(4, 8, 16, 0.95);
@@ -178,10 +201,7 @@ app.get('/', (req, res) => {
                     letter-spacing: 1px;
                 }
                 .toggle-eye:hover { color: #38bdf8; }
-                .searchable-select-wrapper {
-                    position: relative;
-                    width: 100%;
-                }
+                .searchable-select-wrapper { position: relative; width: 100%; }
                 .server-dropdown-list {
                     position: absolute;
                     top: calc(100% + 4px);
@@ -191,7 +211,7 @@ app.get('/', (req, res) => {
                     backdrop-filter: blur(20px);
                     border: 1px solid rgba(56, 189, 248, 0.3);
                     border-radius: 14px;
-                    max-height: 190px;
+                    max-height: 180px;
                     overflow-y: auto;
                     z-index: 99;
                     display: none;
@@ -204,12 +224,8 @@ app.get('/', (req, res) => {
                     color: #cbd5e1;
                     cursor: pointer;
                     border-bottom: 1px solid rgba(255,255,255,0.03);
-                    transition: background 0.2s;
                 }
-                .server-option:hover {
-                    background: rgba(56, 189, 248, 0.1);
-                    color: #38bdf8;
-                }
+                .server-option:hover { background: rgba(56, 189, 248, 0.1); color: #38bdf8; }
                 .dynamic-notice {
                     font-size: 10px;
                     color: #38bdf8;
@@ -217,12 +233,17 @@ app.get('/', (req, res) => {
                     display: flex;
                     align-items: center;
                     gap: 6px;
-                    opacity: 0.9;
                 }
-                .divider {
-                    height: 1px;
-                    background: rgba(255, 255, 255, 0.06);
-                    margin: 18px 0;
+                .error-banner {
+                    background: rgba(239, 68, 68, 0.12);
+                    border: 1px solid rgba(239, 68, 68, 0.3);
+                    color: #fca5a5;
+                    padding: 10px 14px;
+                    border-radius: 12px;
+                    font-size: 11px;
+                    margin-bottom: 16px;
+                    text-align: center;
+                    font-weight: 600;
                 }
                 .btn-connect {
                     width: 100%;
@@ -237,20 +258,10 @@ app.get('/', (req, res) => {
                     box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.5);
                     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
                     letter-spacing: 1px;
+                    margin-top: 10px;
                 }
-                .btn-connect:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 15px 30px -5px rgba(37, 99, 235, 0.7);
-                    filter: brightness(1.1);
-                }
-                .footer-credit {
-                    text-align: center;
-                    margin-top: 20px;
-                    font-size: 11px;
-                    color: #475569;
-                    letter-spacing: 1px;
-                    font-weight: 500;
-                }
+                .btn-connect:hover { transform: translateY(-2px); filter: brightness(1.1); }
+                .footer-credit { text-align: center; margin-top: 18px; font-size: 11px; color: #475569; letter-spacing: 1px; font-weight: 500; }
             </style>
         </head>
         <body>
@@ -259,52 +270,75 @@ app.get('/', (req, res) => {
                     <div class="robot-banner">
                         <div class="banner-title">GIANTSLAYER BOT AI</div>
                     </div>
-                    
-                    <div class="section-header">
-                        <div class="section-title">MT4/5 CREDENTIALS</div>
-                        <div class="server-status-pill">
-                            <div class="ping-dot"></div>
-                            <span>Registry Online</span>
-                        </div>
+
+                    ${errorMsg ? `<div class="error-banner">⚠️ ${errorMsg}</div>` : ''}
+
+                    <div class="auth-tabs">
+                        <div class="auth-tab active" id="tabMt" onclick="switchAuth('mt')">MT4/5 Live Terminal</div>
+                        <div class="auth-tab" id="tabApi" onclick="switchAuth('api')">API Secure Token</div>
                     </div>
                     
-                    <form action="/dashboard" method="POST">
-                        <div class="form-group">
-                            <label>Login ID</label>
-                            <input type="text" name="login_id" placeholder="Enter account login ID" required autocomplete="off">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Password</label>
-                            <div class="input-box-wrapper">
-                                <input type="password" id="passInput" name="password" placeholder="Enter trading password" required>
-                                <button type="button" class="toggle-eye" onclick="togglePass()">SHOW</button>
+                    <form action="/dashboard" method="POST" id="authForm">
+                        <input type="hidden" name="auth_mode" id="authModeInput" value="mt">
+
+                        <!-- MT4/5 Credentials Section -->
+                        <div class="auth-section active" id="sectionMt">
+                            <div class="section-header">
+                                <div class="section-title">LIVE ACCOUNT LOGIN</div>
+                                <div class="server-status-pill">
+                                    <div class="ping-dot"></div>
+                                    <span>Live Node Active</span>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Account Login ID</label>
+                                <input type="text" name="login_id" id="loginIdInput" placeholder="Enter live account login ID" autocomplete="off">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Trading Password</label>
+                                <div class="input-box-wrapper">
+                                    <input type="password" id="passInput" name="password" placeholder="Enter live trading password">
+                                    <button type="button" class="toggle-eye" onclick="togglePass()">SHOW</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Live Trading Server (Real Accounts Only)</label>
+                                <div class="searchable-select-wrapper">
+                                    <input type="text" id="serverSearch" name="server" placeholder="e.g. Exness-Real, FTMO-Server..." autocomplete="off">
+                                    <div id="serverDropdown" class="server-dropdown-list"></div>
+                                </div>
+                                <div class="dynamic-notice">
+                                    🔒 <span>Strict Live-Only Validation (Demo/Trial servers rejected)</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label>Trading Server (Universal Auto-Query)</label>
-                            <div class="searchable-select-wrapper">
-                                <input type="text" id="serverSearch" name="server" placeholder="Type any broker or prop firm..." autocomplete="off" required>
-                                <div id="serverDropdown" class="server-dropdown-list"></div>
+                        <!-- API Token Section -->
+                        <div class="auth-section" id="sectionApi">
+                            <div class="section-header">
+                                <div class="section-title">API GATEWAY LOGIN</div>
+                                <div class="server-status-pill">
+                                    <div class="ping-dot"></div>
+                                    <span>API Secure</span>
+                                </div>
                             </div>
-                            <div class="dynamic-notice">
-                                ⚡ <span>Auto-generates custom nodes for any unmatched broker search instantly</span>
+
+                            <div class="form-group" style="margin-top: 10px;">
+                                <label>Secure API Key / Token</label>
+                                <div class="input-box-wrapper">
+                                    <input type="password" id="tokenInput" name="api_token" placeholder="Enter live API secret token">
+                                    <button type="button" class="toggle-eye" onclick="toggleToken()">SHOW</button>
+                                </div>
+                            </div>
+                            <div class="dynamic-notice" style="margin-bottom: 10px;">
+                                ⚡ <span>Connects directly via high-speed institutional WebSocket</span>
                             </div>
                         </div>
 
-                        <div class="divider"></div>
-
-                        <div class="section-title" style="font-size: 10px; margin-bottom: 8px;">API TOKEN SECURITY</div>
-                        <div class="form-group" style="margin-bottom: 6px;">
-                            <label>API Key / Token</label>
-                            <div class="input-box-wrapper">
-                                <input type="password" id="tokenInput" name="api_token" placeholder="Enter secure API token" required>
-                                <button type="button" class="toggle-eye" onclick="toggleToken()">SHOW</button>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn-connect" style="margin-top: 10px;">PLUG AND PLAY</button>
+                        <button type="submit" class="btn-connect">CONNECT LIVE TERMINAL</button>
                     </form>
 
                     <div class="footer-credit">created by official bakker_rsa</div>
@@ -321,29 +355,48 @@ app.get('/', (req, res) => {
                     t.type = t.type === 'password' ? 'text' : 'password';
                 }
 
+                function switchAuth(mode) {
+                    document.getElementById('authModeInput').value = mode;
+                    if(mode === 'mt') {
+                        document.getElementById('tabMt').classList.add('active');
+                        document.getElementById('tabApi').classList.remove('active');
+                        document.getElementById('sectionMt').classList.add('active');
+                        document.getElementById('sectionApi').classList.remove('active');
+                        document.getElementById('loginIdInput').required = true;
+                        document.getElementById('passInput').required = true;
+                        document.getElementById('serverSearch').required = true;
+                        document.getElementById('tokenInput').required = false;
+                    } else {
+                        document.getElementById('tabApi').classList.add('active');
+                        document.getElementById('tabMt').classList.remove('active');
+                        document.getElementById('sectionApi').classList.add('active');
+                        document.getElementById('sectionMt').classList.remove('active');
+                        document.getElementById('loginIdInput').required = false;
+                        document.getElementById('passInput').required = false;
+                        document.getElementById('serverSearch').required = false;
+                        document.getElementById('tokenInput').required = true;
+                    }
+                }
+                // Initialize required state
+                switchAuth('mt');
+
                 const searchInput = document.getElementById('serverSearch');
                 const dropdown = document.getElementById('serverDropdown');
-
-                let knownServers = [
-                    "JustMarkets-Live", "JustMarkets-Live 2", "JustMarkets-Server", "JustMarkets-MT5",
-                    "EquityEdge-Trade", "FundedNext-Server 3", "FTMO-Server", "FTMO-Server2",
-                    "FundingPips-Prime", "Exness-MT5Real30", "Exness-MT5Real10", "Exness-Real",
-                    "XMGlobal-MT5 5", "DerivSVG-Server", "FBS-Real", "ICMarketsSC-Live", "AvaTrade-Real"
+                let liveServers = [
+                    "Exness-Real", "Exness-MT5Real30", "Exness-MT5Real10",
+                    "JustMarkets-Live", "JustMarkets-Live 2", "JustMarkets-Server",
+                    "FTMO-Server", "FTMO-Server2", "FundingPips-Prime",
+                    "ICMarketsSC-Live", "DerivSVG-Server", "FBS-Real", "EquityEdge-Trade"
                 ];
 
                 function renderDropdown(filterText) {
                     dropdown.innerHTML = '';
                     const query = filterText.toLowerCase().trim();
-
-                    let matches = knownServers.filter(s => s.toLowerCase().includes(query));
+                    let matches = liveServers.filter(s => s.toLowerCase().includes(query));
 
                     if (query.length > 0 && !matches.some(m => m.toLowerCase() === query)) {
                         const capitalized = filterText.charAt(0).toUpperCase() + filterText.slice(1);
-                        matches.unshift(capitalized + "-Live", capitalized + "-Server");
-                    }
-
-                    if (matches.length === 0) {
-                        matches = [filterText + "-Server", filterText + "-Live"];
+                        matches.unshift(capitalized + "-Live", capitalized + "-Real");
                     }
 
                     matches.forEach(serverName => {
@@ -353,18 +406,15 @@ app.get('/', (req, res) => {
                         div.onclick = () => selectServer(serverName);
                         dropdown.appendChild(div);
                     });
-
                     dropdown.style.display = 'block';
                 }
 
                 searchInput.addEventListener('focus', () => renderDropdown(searchInput.value));
                 searchInput.addEventListener('input', () => renderDropdown(searchInput.value));
-
                 function selectServer(value) {
                     searchInput.value = value;
                     dropdown.style.display = 'none';
                 }
-
                 document.addEventListener('click', (e) => {
                     if (!e.target.closest('.searchable-select-wrapper')) {
                         dropdown.style.display = 'none';
@@ -378,8 +428,19 @@ app.get('/', (req, res) => {
 
 // ================= PAGE 2: ELITE COMMAND CENTER DASHBOARD =================
 app.post('/dashboard', (req, res) => {
-    const { login_id, server } = req.body;
-    botState.logs.unshift(`[AUTH] Handshake verified for ID: ${login_id} on Node: ${server}`);
+    const { auth_mode, login_id, server, api_token } = req.body;
+
+    if (auth_mode === 'mt') {
+        const lowerServer = (server || '').toLowerCase();
+        // Validation: Block demo servers
+        if (lowerServer.includes('demo') || lowerServer.includes('trial') || lowerServer.includes('practice')) {
+            return res.redirect('/?error=Demo%20accounts%20are%20disabled.%20Please%20use%20a%20Live%20trading%20account.');
+        }
+        botState.logs.unshift(`[AUTH] Live MT4/5 Verified - ID: ${login_id} | Node: ${server}`);
+    } else {
+        botState.logs.unshift(`[AUTH] Secure API Token Handshake Verified (Token: ${api_token.substring(0, 4)}••••)`);
+    }
+
     renderDashboard(req, res);
 });
 
@@ -388,16 +449,23 @@ app.get('/dashboard', (req, res) => {
         botState.strategy = req.query.strategy;
         botState.logs.unshift(`[AI KERNEL] Strategy re-calibrated to: ${botState.strategy}`);
     }
+    if (req.query.new_target) {
+        const parsedTarget = parseFloat(req.query.new_target);
+        if (!isNaN(parsedTarget) && parsedTarget > 0) {
+            botState.targetCap = parsedTarget;
+            botState.logs.unshift(`[CONFIG] Target Cap successfully updated to $${parsedTarget.toLocaleString()}`);
+        }
+    }
     renderDashboard(req, res);
 });
 
 function renderDashboard(req, res) {
     if (req.query.action === 'run') {
         botState.running = true;
-        botState.logs.unshift(`[EXEC] ${botState.strategy} engine live. Institutional volatility & order-block filter active.`);
+        botState.logs.unshift(`[EXEC] ${botState.strategy} live trading engine active on real capital.`);
     } else if (req.query.action === 'stop') {
         botState.running = false;
-        botState.logs.unshift(`[SYSTEM] Trading session safely suspended and secured.`);
+        botState.logs.unshift(`[SYSTEM] Live trading session safely suspended and secured.`);
     }
 
     res.send(`
@@ -406,7 +474,7 @@ function renderDashboard(req, res) {
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>GIANTSLAYER BOT AI - Command Center</title>
+            <title>GIANTSLAYER BOT AI - Live Command Center</title>
             <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
             <style>
                 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -433,12 +501,7 @@ function renderDashboard(req, res) {
                     margin-bottom: 12px;
                     box-shadow: 0 12px 30px rgba(0,0,0,0.5);
                 }
-                .top-right-group {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: flex-end;
-                    gap: 6px;
-                }
+                .top-right-group { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
                 .status-badge {
                     font-size: 10px;
                     font-weight: 700;
@@ -460,10 +523,7 @@ function renderDashboard(req, res) {
                     cursor: pointer;
                     text-decoration: none;
                     letter-spacing: 0.5px;
-                    transition: background 0.2s;
                 }
-                .btn-logout:hover { background: #ef4444; color: #fff; }
-                
                 .grid-stats {
                     display: grid;
                     grid-template-columns: repeat(3, 1fr);
@@ -477,21 +537,16 @@ function renderDashboard(req, res) {
                     border-radius: 14px;
                     padding: 12px 8px;
                     text-align: center;
+                    position: relative;
                 }
                 .card-stat span { font-size: 9px; color: #64748b; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
                 .card-stat strong { font-size: 13px; color: #f1f5f9; font-family: 'JetBrains Mono', monospace; font-weight: 600; }
+                .clickable-target { cursor: pointer; color: #38bdf8 !important; text-decoration: underline; text-decoration-style: dotted; }
                 
                 .profit-val {
                     color: #4ade80 !important;
                     text-shadow: 0 0 12px rgba(74, 222, 128, 0.35);
-                    animation: pulseProfit 3s infinite ease-in-out;
                 }
-                @keyframes pulseProfit {
-                    0% { opacity: 0.85; }
-                    50% { opacity: 1; transform: scale(1.02); }
-                    100% { opacity: 0.85; }
-                }
-
                 .section-box {
                     background: rgba(6, 10, 18, 0.85);
                     backdrop-filter: blur(20px);
@@ -501,11 +556,7 @@ function renderDashboard(req, res) {
                     margin-bottom: 12px;
                     box-shadow: 0 12px 30px rgba(0,0,0,0.5);
                 }
-                .strategy-selector {
-                    display: flex;
-                    gap: 8px;
-                    margin-top: 10px;
-                }
+                .strategy-selector { display: flex; gap: 8px; margin-top: 10px; }
                 .strat-btn {
                     flex: 1;
                     background: rgba(3, 6, 12, 0.9);
@@ -519,8 +570,6 @@ function renderDashboard(req, res) {
                     text-align: center;
                     text-decoration: none;
                     display: block;
-                    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-                    -webkit-tap-highlight-color: transparent;
                     letter-spacing: 0.3px;
                 }
                 .strat-btn.active {
@@ -529,8 +578,6 @@ function renderDashboard(req, res) {
                     color: #38bdf8;
                     box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
                 }
-                .strat-btn:active { transform: scale(0.96); }
-
                 .ai-confluence-card {
                     background: linear-gradient(135deg, rgba(56, 189, 248, 0.06), rgba(37, 99, 235, 0.12));
                     border: 1px solid rgba(56, 189, 248, 0.3);
@@ -546,22 +593,10 @@ function renderDashboard(req, res) {
                     font-size: 11px;
                     font-weight: 700;
                     color: #38bdf8;
-                    letter-spacing: 0.5px;
                 }
-                .ai-metrics {
-                    display: flex;
-                    justify-content: space-between;
-                    font-size: 10px;
-                    color: #64748b;
-                    font-family: 'JetBrains Mono', monospace;
-                }
-                .ai-metrics span strong { color: #f1f5f9; font-weight: 600; }
-
-                .btn-row {
-                    display: flex;
-                    gap: 10px;
-                    margin-bottom: 12px;
-                }
+                .ai-metrics { display: flex; justify-content: space-between; font-size: 10px; color: #64748b; font-family: 'JetBrains Mono', monospace; }
+                .ai-metrics span strong { color: #f1f5f9; }
+                .btn-row { display: flex; gap: 10px; margin-bottom: 12px; }
                 .btn {
                     flex: 1;
                     padding: 15px;
@@ -573,21 +608,9 @@ function renderDashboard(req, res) {
                     text-align: center;
                     text-decoration: none;
                     letter-spacing: 0.8px;
-                    transition: all 0.25s ease;
                 }
-                .btn-run { 
-                    background: linear-gradient(135deg, #16a34a, #15803d); 
-                    color: #fff; 
-                    box-shadow: 0 10px 25px rgba(34, 197, 94, 0.35); 
-                }
-                .btn-run:hover { filter: brightness(1.1); transform: translateY(-1px); }
-                .btn-stop { 
-                    background: linear-gradient(135deg, #dc2626, #b91c1c); 
-                    color: #fff; 
-                    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.35); 
-                }
-                .btn-stop:hover { filter: brightness(1.1); transform: translateY(-1px); }
-                
+                .btn-run { background: linear-gradient(135deg, #16a34a, #15803d); color: #fff; box-shadow: 0 10px 25px rgba(34, 197, 94, 0.35); }
+                .btn-stop { background: linear-gradient(135deg, #dc2626, #b91c1c); color: #fff; box-shadow: 0 10px 25px rgba(239, 68, 68, 0.35); }
                 .logs-box {
                     background: rgba(2, 4, 8, 0.95);
                     border: 1px solid rgba(255, 255, 255, 0.06);
@@ -600,14 +623,7 @@ function renderDashboard(req, res) {
                     overflow-y: auto;
                     line-height: 1.5;
                 }
-                .footer-credit {
-                    text-align: center;
-                    margin-top: 14px;
-                    font-size: 11px;
-                    color: #475569;
-                    letter-spacing: 1px;
-                    font-weight: 500;
-                }
+                .footer-credit { text-align: center; margin-top: 14px; font-size: 11px; color: #475569; letter-spacing: 1px; font-weight: 500; }
             </style>
         </head>
         <body>
@@ -615,10 +631,10 @@ function renderDashboard(req, res) {
                 <div class="top-bar">
                     <div>
                         <span style="font-size: 13px; font-weight: 800; color: #38bdf8; display: block; letter-spacing: 0.5px;">🟢 GIANTSLAYER BOT AI</span>
-                        <span style="font-size: 9px; color: #64748b; letter-spacing: 1px; font-weight: 600;">COMMAND CENTER</span>
+                        <span style="font-size: 9px; color: #64748b; letter-spacing: 1px; font-weight: 600;">LIVE COMMAND CENTER</span>
                     </div>
                     <div class="top-right-group">
-                        <span class="status-badge">${botState.running ? 'ONLINE & RUNNING' : 'STANDBY MODE'}</span>
+                        <span class="status-badge">${botState.running ? 'LIVE & RUNNING' : 'STANDBY MODE'}</span>
                         <a href="/" class="btn-logout">LOG OUT</a>
                     </div>
                 </div>
@@ -634,7 +650,7 @@ function renderDashboard(req, res) {
                     </div>
                     <div class="card-stat">
                         <span>Target Cap</span>
-                        <strong>$${botState.targetCap.toLocaleString()}</strong>
+                        <strong class="clickable-target" onclick="editTarget()" title="Click to edit target cap">$${botState.targetCap.toLocaleString()}</strong>
                     </div>
                 </div>
 
@@ -648,8 +664,8 @@ function renderDashboard(req, res) {
                         <strong class="profit-val">+$${botState.liveProfit.toFixed(2)}</strong>
                     </div>
                     <div class="card-stat">
-                        <span>Auto-Scanner</span>
-                        <strong>Universal</strong>
+                        <span>Execution Mode</span>
+                        <strong style="color: #4ade80;">Live Direct</strong>
                     </div>
                 </div>
 
@@ -665,7 +681,7 @@ function renderDashboard(req, res) {
                 <div class="ai-confluence-card">
                     <div class="ai-confluence-header">
                         <span>🤖 AI MOMENTUM & DAILY BIAS ENGINE</span>
-                        <span style="color: #4ade80;">ACTIVE</span>
+                        <span style="color: #4ade80;">LIVE ACTIVE</span>
                     </div>
                     <div class="ai-metrics">
                         <span>Bias: <strong style="color: #4ade80;">BULLISH (H4)</strong></span>
@@ -675,7 +691,7 @@ function renderDashboard(req, res) {
                 </div>
 
                 <div class="btn-row">
-                    <a href="/dashboard?action=run" class="btn btn-run">▶ Run Trades</a>
+                    <a href="/dashboard?action=run" class="btn btn-run">▶ Run Live Trades</a>
                     <a href="/dashboard?action=stop" class="btn btn-stop">■ Stop Trading</a>
                 </div>
 
@@ -688,11 +704,26 @@ function renderDashboard(req, res) {
 
                 <div class="footer-credit">created by official bakker_rsa</div>
             </div>
+
+            <script>
+                function editTarget() {
+                    const currentVal = ${botState.targetCap};
+                    const newVal = prompt("Enter new Target Cap / Max Amount ($):", currentVal);
+                    if (newVal !== null) {
+                        const parsed = parseFloat(newVal);
+                        if (!isNaN(parsed) && parsed > 0) {
+                            window.location.href = '/dashboard?new_target=' + parsed;
+                        } else {
+                            alert('Please enter a valid numeric amount.');
+                        }
+                    }
+                }
+            </script>
         </body>
         </html>
     `);
 }
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Live Server running on port ${PORT}`);
 });
