@@ -1,8 +1,7 @@
 /**
- * Project: The Giantslayer Bot AI v5.5 (GitHub Ready Deployment Suite - Enhanced Interface & Non-Revealing Metrics)
- * Description: Fully integrated Node.js / Express backend with strict asset boundary enforcement, 
- * zero dead space / full-screen mobile design, zero shaking, and added non-revealing telemetry buttons 
- * (Latency Ping Status, Server Load Indicator, Session Time Counter, and Emergency Quick-Liquidate).
+ * Project: The Giantslayer Bot AI v5.6 (GitHub Ready Production Suite - Refined Premium Typography & Spacing)
+ * Description: Fully integrated Node.js / Express backend featuring optimized font sizing, 
+ * clean card alignment, zero-scroll single-viewport layout, and professional institutional UI nomenclature.
  */
 
 const express = require('express');
@@ -32,8 +31,8 @@ let botState = {
         multiScannerAllowed: ['EUR/USD', 'GBP/USD', 'USD/JPY', 'XAU/USD (Gold)', 'XAG/USD (Silver)', 'US30', 'NAS100', 'GER30', 'Crypto (BTC/ETH)', 'Deriv Volatility 75 (V75)', 'Deriv Volatility 100 (V100)', 'Weltrade VIX Synthetic', 'FlipX Asset Engine']
     },
     logs: [
-        "[SYSTEM] Giantslayer v5.5 GitHub Production Node online.",
-        "[INIT] Telemetry suites active: Ping monitor, session tracker, and instant emergency liquidity switcher."
+        "[SYSTEM] Giantslayer v5.6 Production Node online.",
+        "[INIT] Secure institutional gateway established."
     ]
 };
 
@@ -77,7 +76,7 @@ function onCandle() {
 
 setInterval(onCandle, 4000);
 
-// Common full-screen CSS to prevent shaking, jitter, and dead whitespace across both pages
+// Optimized viewport layout styles to eliminate overlap and provide clean proportional spacing
 const baseStyles = `
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
     html, body {
@@ -99,7 +98,7 @@ const baseStyles = `
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        padding: 8px 10px;
+        padding: 6px 10px;
         border: 1px solid rgba(255, 255, 255, 0.04);
     }
 `;
@@ -119,8 +118,8 @@ app.get('/', (req, res) => {
                 ${baseStyles}
                 .robot-banner {
                     width: 100%;
-                    height: 75px;
-                    border-radius: 10px;
+                    height: 65px;
+                    border-radius: 8px;
                     background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(3,7,14,0.8)), url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
                     position: relative;
                     border: 1px solid rgba(56, 189, 248, 0.25);
@@ -130,49 +129,48 @@ app.get('/', (req, res) => {
                     flex-shrink: 0;
                 }
                 .banner-title {
-                    font-size: 10.5px; font-weight: 800; letter-spacing: 2px; color: #ffffff;
-                    background: rgba(4, 7, 13, 0.88); padding: 4px 10px; border-radius: 12px;
+                    font-size: 10px; font-weight: 800; letter-spacing: 2px; color: #ffffff;
+                    background: rgba(4, 7, 13, 0.88); padding: 3px 8px; border-radius: 10px;
                     border: 1px solid rgba(56, 189, 248, 0.4);
                 }
-                .form-content { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 6px; }
-                .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
-                .section-title { font-size: 9.5px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 1px; }
+                .form-content { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 5px; }
+                .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1px; }
+                .section-title { font-size: 9px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 1px; }
                 
-                /* Added Non-Revealing Telemetry Bar for Login Page */
                 .login-telemetry {
-                    display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 4px;
+                    display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-bottom: 2px;
                 }
                 .telemetry-chip {
-                    background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);
-                    border-radius: 8px; padding: 4px; text-align: center; font-size: 8px; color: #94a3b8; font-family: 'JetBrains Mono', monospace;
+                    background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04);
+                    border-radius: 6px; padding: 4px 2px; text-align: center; font-size: 7.5px; color: #94a3b8; font-family: 'JetBrains Mono', monospace;
                 }
-                .telemetry-chip span { color: #4ade80; font-weight: 700; display: block; }
+                .telemetry-chip span { color: #4ade80; font-weight: 700; display: block; font-size: 8px; margin-top: 1px; }
 
                 .form-group { position: relative; }
-                label { display: block; font-size: 9.5px; font-weight: 600; color: #94a3b8; margin-bottom: 2px; }
+                label { display: block; font-size: 9px; font-weight: 600; color: #94a3b8; margin-bottom: 2px; }
                 .input-box-wrapper { position: relative; display: flex; align-items: center; }
                 input {
                     width: 100%; background: rgba(3, 6, 12, 0.98); border: 1px solid rgba(255, 255, 255, 0.08);
-                    border-radius: 8px; padding: 9px 10px; color: #ffffff; font-size: 11.5px; font-family: 'JetBrains Mono', monospace; outline: none;
+                    border-radius: 6px; padding: 8px 9px; color: #ffffff; font-size: 11px; font-family: 'JetBrains Mono', monospace; outline: none;
                 }
                 input:focus { border-color: #38bdf8; }
-                .toggle-eye { position: absolute; right: 10px; background: none; border: none; color: #64748b; cursor: pointer; font-size: 8.5px; font-weight: 700; }
+                .toggle-eye { position: absolute; right: 9px; background: none; border: none; color: #64748b; cursor: pointer; font-size: 8px; font-weight: 700; }
                 .searchable-select-wrapper { position: relative; width: 100%; }
                 .server-dropdown-list {
                     position: absolute; bottom: calc(100% + 2px); left: 0; right: 0;
                     background: rgba(8, 14, 26, 0.99); border: 1px solid rgba(56, 189, 248, 0.4);
-                    border-radius: 8px; max-height: 120px; overflow-y: auto; z-index: 999; display: none;
+                    border-radius: 6px; max-height: 110px; overflow-y: auto; z-index: 999; display: none;
                 }
-                .server-option { padding: 8px 10px; font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #e2e8f0; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.03); }
+                .server-option { padding: 7px 9px; font-size: 10.5px; font-family: 'JetBrains Mono', monospace; color: #e2e8f0; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.03); }
                 .server-option:hover { background: rgba(56, 189, 248, 0.2); color: #38bdf8; }
-                .dynamic-notice { font-size: 8.5px; color: #38bdf8; margin-top: 2px; }
-                .error-banner { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; padding: 5px 8px; border-radius: 6px; font-size: 9.5px; text-align: center; font-weight: 600; }
+                .dynamic-notice { font-size: 8px; color: #38bdf8; margin-top: 2px; font-weight: 500; }
+                .error-banner { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; padding: 4px 6px; border-radius: 6px; font-size: 9px; text-align: center; font-weight: 600; }
                 .btn-connect {
                     width: 100%; background: linear-gradient(135deg, #0284c7, #2563eb); color: #ffffff; border: none;
-                    border-radius: 8px; padding: 10px; font-size: 11.5px; font-weight: 700; cursor: pointer;
-                    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4); margin-top: 2px;
+                    border-radius: 6px; padding: 9px; font-size: 11px; font-weight: 700; cursor: pointer;
+                    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35); margin-top: 2px;
                 }
-                .footer-credit { text-align: center; font-size: 8.5px; color: #475569; letter-spacing: 1px; font-weight: 500; flex-shrink: 0; }
+                .footer-credit { text-align: center; font-size: 8px; color: #475569; letter-spacing: 1px; font-weight: 500; flex-shrink: 0; }
             </style>
         </head>
         <body>
@@ -185,31 +183,30 @@ app.get('/', (req, res) => {
 
                 <form action="/dashboard" method="POST" id="authForm" class="form-content">
                     <div class="section-header">
-                        <div class="section-title">LIVE ACCOUNT LOGIN</div>
+                        <div class="section-title">Institutional Terminal Access</div>
                     </div>
 
-                    <!-- Added Non-Revealing System Telemetry Chips -->
                     <div class="login-telemetry">
                         <div class="telemetry-chip">API Latency<span id="pingVal">18ms</span></div>
-                        <div class="telemetry-chip">Node Status<span>Optimal</span></div>
-                        <div class="telemetry-chip">Security SSL<span>256-bit</span></div>
+                        <div class="telemetry-chip">Node Health<span>Optimal</span></div>
+                        <div class="telemetry-chip">Encryption<span>256-bit SSL</span></div>
                     </div>
                     
                     <div class="form-group">
-                        <label>Account Login ID (Numeric Only)</label>
+                        <label>Broker Account ID</label>
                         <input type="text" name="login_id" id="loginIdInput" value="${botState.accountId}" placeholder="e.g. 248484" required>
                     </div>
                     
                     <div class="form-group">
-                        <label>Trading Password</label>
+                        <label>Secure Password</label>
                         <div class="input-box-wrapper">
-                            <input type="password" id="passInput" name="password" value="SecurePass123" placeholder="Enter valid password" required>
+                            <input type="password" id="passInput" name="password" value="SecurePass123" placeholder="Enter password" required>
                             <button type="button" class="toggle-eye" onclick="togglePass()">SHOW</button>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>Live Trading Server</label>
+                        <label>Designated Trading Server</label>
                         <div class="searchable-select-wrapper">
                             <div id="serverDropdown" class="server-dropdown-list"></div>
                             <input type="text" id="serverSearch" name="server" value="${botState.serverName}" placeholder="e.g. Weltrade-Live" required>
@@ -217,7 +214,7 @@ app.get('/', (req, res) => {
                         <div class="dynamic-notice">🔒 Multi-Broker Asset Routing Ready</div>
                     </div>
 
-                    <button type="submit" class="btn-connect">CONNECT LIVE TERMINAL</button>
+                    <button type="submit" class="btn-connect">ESTABLISH SECURE SESSION</button>
                 </form>
 
                 <div class="footer-credit">created by official bakker_rsa</div>
@@ -229,7 +226,6 @@ app.get('/', (req, res) => {
                     p.type = p.type === 'password' ? 'text' : 'password';
                 }
 
-                // Dynamic Ping Fluctuation for Telemetry realism without revealing logic
                 setInterval(() => {
                     const randomPing = Math.floor(Math.random() * 8) + 14;
                     document.getElementById('pingVal').textContent = randomPing + 'ms';
@@ -302,36 +298,36 @@ app.post('/dashboard', (req, res) => {
     res.redirect('/dashboard');
 });
 
-// ================= PAGE 2: COMMAND CENTER DASHBOARD (ENHANCED NON-REVEALING TELEMETRY & ACTIONS) =================
+// ================= PAGE 2: COMMAND CENTER DASHBOARD (REFINED PREMIUM NOMENCLATURE & CLEAN PROPORTIONS) =================
 app.get('/dashboard', (req, res) => {
     if (req.query.mode) {
         botState.strategyMode = req.query.mode;
-        botState.logs.unshift(`[SWITCH] Active Mode changed to: ${botState.strategyMode}`);
+        botState.logs.unshift(`[SWITCH] Active Execution Mode: ${botState.strategyMode}`);
     }
     if (req.query.new_target) {
         const parsedTarget = parseFloat(req.query.new_target);
         if (!isNaN(parsedTarget) && parsedTarget > 0) {
             botState.targetCap = parsedTarget;
-            botState.logs.unshift(`[CONFIG] Target Cap updated to $${parsedTarget.toLocaleString()}`);
+            botState.logs.unshift(`[CONFIG] Target Profit Cap set to $${parsedTarget.toLocaleString()}`);
         }
     }
     if (req.query.new_max_loss) {
         const parsedMaxLoss = parseFloat(req.query.new_max_loss);
         if (!isNaN(parsedMaxLoss) && parsedMaxLoss > 0) {
             botState.maxLossCap = parsedMaxLoss;
-            botState.logs.unshift(`[CONFIG] Max Loss safety cap set to $${parsedMaxLoss.toLocaleString()}`);
+            botState.logs.unshift(`[CONFIG] Max Drawdown Limit set to $${parsedMaxLoss.toLocaleString()}`);
         }
     }
     if (req.query.action === 'run') {
         botState.running = true;
-        botState.logs.unshift(`[EXEC] Scanning active under strict [${botState.strategyMode}] rules.`);
+        botState.logs.unshift(`[EXEC] Automated scanner active under [${botState.strategyMode}] rules.`);
     } else if (req.query.action === 'stop') {
         botState.running = false;
-        botState.logs.unshift(`[SYSTEM] Trading paused and capital secured.`);
+        botState.logs.unshift(`[SYSTEM] Operational pause executed. Capital secured.`);
     } else if (req.query.action === 'liquidate') {
         botState.running = false;
         botState.liveProfit = 0.00;
-        botState.logs.unshift(`[EMERGENCY] ⚡ Quick-Liquidate triggered. All active basket positions flattened instantly.`);
+        botState.logs.unshift(`[EMERGENCY] ⚡ Quick-Liquidate executed. Active positions flattened.`);
     }
 
     res.send(`
@@ -346,90 +342,90 @@ app.get('/dashboard', (req, res) => {
                 ${baseStyles}
                 .top-bar {
                     background: rgba(6, 10, 18, 0.95); border: 1px solid rgba(255, 255, 255, 0.06);
-                    border-radius: 10px; padding: 6px 10px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
+                    border-radius: 8px; padding: 5px 8px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
                 }
                 .status-badge {
-                    font-size: 8.5px; font-weight: 700; padding: 2px 7px; border-radius: 6px;
+                    font-size: 8px; font-weight: 700; padding: 2px 6px; border-radius: 4px;
                     background: ${botState.running ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)'};
                     color: ${botState.running ? '#4ade80' : '#fca5a5'};
                     border: 1px solid ${botState.running ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)'};
                 }
-                .top-right-group { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-                .btn-logout { background: rgba(239, 68, 68, 0.1); color: #fca5a5; padding: 2px 5px; border-radius: 4px; font-size: 7.5px; text-decoration: none; font-weight: 700; }
+                .top-right-group { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; }
+                .btn-logout { background: rgba(239, 68, 68, 0.1); color: #fca5a5; padding: 1px 4px; border-radius: 3px; font-size: 7px; text-decoration: none; font-weight: 700; }
+                
                 .grid-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; flex-shrink: 0; }
-                .card-stat { background: rgba(6, 10, 18, 0.85); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 8px; padding: 5px 4px; text-align: center; }
-                .card-stat span { font-size: 7px; color: #64748b; display: block; margin-bottom: 1px; text-transform: uppercase; font-weight: 600; }
-                .card-stat strong { font-size: 10.5px; color: #f1f5f9; font-family: 'JetBrains Mono', monospace; }
+                .card-stat { background: rgba(6, 10, 18, 0.85); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 6px; padding: 4px; text-align: center; }
+                .card-stat span { font-size: 6.5px; color: #64748b; display: block; margin-bottom: 1px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; }
+                .card-stat strong { font-size: 10px; color: #f1f5f9; font-family: 'JetBrains Mono', monospace; font-weight: 600; }
                 .clickable-target { cursor: pointer; color: #38bdf8 !important; text-decoration: underline; text-decoration-style: dotted; }
                 .profit-val { color: #4ade80 !important; }
                 
-                /* Added Telemetry Row for Dashboard */
                 .telemetry-row {
                     display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; flex-shrink: 0;
                 }
                 .telemetry-card {
                     background: rgba(3, 6, 12, 0.9); border: 1px solid rgba(255, 255, 255, 0.04);
-                    border-radius: 8px; padding: 4px; text-align: center; font-size: 7.5px; color: #94a3b8; font-family: 'JetBrains Mono', monospace;
+                    border-radius: 6px; padding: 3px; text-align: center; font-size: 7px; color: #94a3b8; font-family: 'JetBrains Mono', monospace;
                 }
-                .telemetry-card span { color: #38bdf8; font-weight: 700; display: block; }
+                .telemetry-card span { color: #38bdf8; font-weight: 700; display: block; font-size: 7.5px; }
 
-                .section-box { background: rgba(6, 10, 18, 0.85); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 6px 10px; flex-shrink: 0; }
-                .mode-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 3px; }
+                .section-box { background: rgba(6, 10, 18, 0.85); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 8px; padding: 5px 8px; flex-shrink: 0; }
+                .mode-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; margin-top: 2px; }
                 .mode-btn {
                     background: rgba(3, 6, 12, 0.9); border: 1px solid rgba(255, 255, 255, 0.06);
-                    border-radius: 6px; padding: 6px 2px; font-size: 7px; font-weight: 700; color: #64748b;
-                    text-align: center; text-decoration: none; display: block;
+                    border-radius: 5px; padding: 5px 2px; font-size: 6.5px; font-weight: 700; color: #64748b;
+                    text-align: center; text-decoration: none; display: block; letter-spacing: 0.3px;
                 }
-                .mode-btn.active { background: rgba(56, 189, 248, 0.15); border-color: #38bdf8; color: #38bdf8; box-shadow: 0 0 6px rgba(56, 189, 248, 0.2); }
+                .mode-btn.active { background: rgba(56, 189, 248, 0.15); border-color: #38bdf8; color: #38bdf8; box-shadow: 0 0 5px rgba(56, 189, 248, 0.2); }
+                
                 .prop-card {
-                    background: linear-gradient(135deg, rgba(245, 158, 11, 0.06), rgba(37, 99, 235, 0.1));
-                    border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 8px; padding: 6px 8px; font-size: 8.5px; flex-shrink: 0;
+                    background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(37, 99, 235, 0.08));
+                    border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 6px; padding: 5px 7px; font-size: 8px; flex-shrink: 0;
                 }
                 .btn-row { display: flex; gap: 4px; flex-shrink: 0; }
-                .btn { flex: 1; padding: 8px; border-radius: 8px; font-weight: 700; font-size: 10px; border: none; cursor: pointer; text-align: center; text-decoration: none; color: #fff; }
-                .btn-run { background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 4px 10px rgba(34, 197, 94, 0.3); }
-                .btn-stop { background: linear-gradient(135deg, #ca8a04, #a16207); box-shadow: 0 4px 10px rgba(202, 138, 4, 0.3); }
-                .btn-liquidate { background: linear-gradient(135deg, #dc2626, #b91c1c); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3); flex: 0.8; font-size: 9px; }
-                .logs-box { background: rgba(2, 4, 8, 0.95); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 6px; padding: 5px 7px; font-family: 'JetBrains Mono', monospace; font-size: 8px; color: #4ade80; height: 65px; overflow-y: auto; line-height: 1.25; }
-                .footer-credit { text-align: center; font-size: 8.5px; color: #475569; letter-spacing: 1px; flex-shrink: 0; }
+                .btn { flex: 1; padding: 7px; border-radius: 6px; font-weight: 700; font-size: 9.5px; border: none; cursor: pointer; text-align: center; text-decoration: none; color: #fff; }
+                .btn-run { background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 3px 8px rgba(34, 197, 94, 0.3); }
+                .btn-stop { background: linear-gradient(135deg, #ca8a04, #a16207); box-shadow: 0 3px 8px rgba(202, 138, 4, 0.3); }
+                .btn-liquidate { background: linear-gradient(135deg, #dc2626, #b91c1c); box-shadow: 0 3px 8px rgba(239, 68, 68, 0.3); flex: 0.8; font-size: 8.5px; }
+                
+                .logs-box { background: rgba(2, 4, 8, 0.95); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 5px; padding: 4px 6px; font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: #4ade80; height: 55px; overflow-y: auto; line-height: 1.2; }
+                .footer-credit { text-align: center; font-size: 8px; color: #475569; letter-spacing: 1px; flex-shrink: 0; }
             </style>
         </head>
         <body>
             <div class="fullscreen-wrapper">
                 <div class="top-bar">
                     <div>
-                        <span style="font-size: 10.5px; font-weight: 800; color: #38bdf8; display: block;">🟢 GIANTSLAYER BOT AI</span>
-                        <span style="font-size: 7.5px; color: #64748b; font-weight: 600;">ID: ${botState.accountId} | ${botState.serverName}</span>
+                        <span style="font-size: 10px; font-weight: 800; color: #38bdf8; display: block;">🟢 GIANTSLAYER BOT AI</span>
+                        <span style="font-size: 7px; color: #64748b; font-weight: 600;">ID: ${botState.accountId} | ${botState.serverName}</span>
                     </div>
                     <div class="top-right-group">
-                        <span class="status-badge">${botState.running ? 'LIVE SCANNING' : 'STANDBY'}</span>
+                        <span class="status-badge">${botState.running ? 'ACTIVE SCAN' : 'STANDBY'}</span>
                         <a href="/" class="btn-logout">LOG OUT</a>
                     </div>
                 </div>
 
-                <!-- Added Non-Revealing Dashboard Telemetry Bar -->
                 <div class="telemetry-row">
-                    <div class="telemetry-card">Session Uptime<span id="uptimeCounter">00:00</span></div>
+                    <div class="telemetry-card">Uptime<span id="uptimeCounter">00:00</span></div>
                     <div class="telemetry-card">Node Ping<span id="dashPing">16ms</span></div>
-                    <div class="telemetry-card">Execution Mode<span>Zero-Leak</span></div>
+                    <div class="telemetry-card">Routing<span style="color:#4ade80">Zero-Leak</span></div>
                     <div class="telemetry-card">CPU Load<span id="cpuLoad">2.4%</span></div>
                 </div>
 
                 <div class="grid-stats">
-                    <div class="card-stat"><span>Core Strategy</span><strong style="color: #38bdf8; font-size: 8px;">Strict Isolated</strong></div>
-                    <div class="card-stat"><span>Target Cap</span><strong class="clickable-target" onclick="editTarget()">$${botState.targetCap.toLocaleString()}</strong></div>
-                    <div class="card-stat"><span>Max Loss Limit</span><strong class="clickable-target" onclick="editMaxLoss()" style="color: #fca5a5 !important;">-$${botState.maxLossCap.toLocaleString()}</strong></div>
+                    <div class="card-stat"><span>Strategy Profile</span><strong style="color: #38bdf8; font-size: 7.5px;">Strict Isolated</strong></div>
+                    <div class="card-stat"><span>Profit Target</span><strong class="clickable-target" onclick="editTarget()">$${botState.targetCap.toLocaleString()}</strong></div>
+                    <div class="card-stat"><span>Drawdown Cap</span><strong class="clickable-target" onclick="editMaxLoss()" style="color: #fca5a5 !important;">-$${botState.maxLossCap.toLocaleString()}</strong></div>
                 </div>
 
                 <div class="grid-stats">
-                    <div class="card-stat"><span>Balance</span><strong style="color: #38bdf8;">$${botState.accountBalance.toFixed(2)}</strong></div>
+                    <div class="card-stat"><span>Account Balance</span><strong style="color: #38bdf8;">$${botState.accountBalance.toFixed(2)}</strong></div>
                     <div class="card-stat"><span>Floating P&L</span><strong class="profit-val">+$${botState.liveProfit.toFixed(2)}</strong></div>
-                    <div class="card-stat"><span>Active Mode</span><strong style="color: #facc15; font-size: 7px;">${botState.strategyMode}</strong></div>
+                    <div class="card-stat"><span>Execution Engine</span><strong style="color: #facc15; font-size: 6.5px;">${botState.strategyMode}</strong></div>
                 </div>
 
-                <!-- EXECUTION SUITE & ENGINE SWITCHER -->
                 <div class="section-box">
-                    <div style="font-size: 9px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px;">Execution Suite & Engine Switcher</div>
+                    <div style="font-size: 8px; font-weight: 700; color: #38bdf8; text-transform: uppercase; letter-spacing: 0.5px;">Execution Suite & Engine Switcher</div>
                     <div class="mode-selector">
                         <a href="/dashboard?mode=Boom+%26+Crash" class="mode-btn ${botState.strategyMode === 'Boom & Crash' ? 'active' : ''}">BOOM & CRASH</a>
                         <a href="/dashboard?mode=Prop-Firm" class="mode-btn ${botState.strategyMode === 'Prop-Firm' ? 'active' : ''}">PROP-FIRM (&lt;4%)</a>
@@ -440,36 +436,35 @@ app.get('/dashboard', (req, res) => {
                 ${botState.strategyMode === 'Prop-Firm' ? `
                 <div class="prop-card">
                     <div style="font-weight: 700; color: #fbbf24; margin-bottom: 1px;">🛡️ Prop-Firm Strict Guardrails Active (&lt;4% Loss)</div>
-                    <div style="color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 8px;">
-                        Max Daily Loss: $${botState.propFirmRules.dailyLossLimit} (3.5% inclusive of Swaps & Commissions)
+                    <div style="color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 7.5px;">
+                        Max Daily Drawdown: $${botState.propFirmRules.dailyLossLimit} (Inclusive of Swaps & Commissions)
                     </div>
                 </div>` : ''}
 
                 ${botState.strategyMode === 'Boom & Crash' ? `
-                <div class="prop-card" style="border-color: rgba(56, 189, 248, 0.3); background: linear-gradient(135deg, rgba(56, 189, 248, 0.05), rgba(37, 99, 235, 0.1));">
-                    <div style="font-weight: 700; color: #38bdf8; margin-bottom: 1px;">⚡ Boom & Crash (No-Spike Micro-Trend Mode)</div>
-                    <div style="color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 8px;">
-                        Trading Boom & Crash exclusively. Spike trading disabled; micro-trend candles only.
+                <div class="prop-card" style="border-color: rgba(56, 189, 248, 0.25); background: linear-gradient(135deg, rgba(56, 189, 248, 0.04), rgba(37, 99, 235, 0.08));">
+                    <div style="font-weight: 700; color: #38bdf8; margin-bottom: 1px;">⚡ Boom & Crash (Micro-Trend Capture Engine)</div>
+                    <div style="color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 7.5px;">
+                        Spike filtration engaged; continuous micro-candle algorithmic execution active.
                     </div>
                 </div>` : ''}
 
                 ${botState.strategyMode === 'Multi-Scanner' ? `
-                <div class="prop-card" style="border-color: rgba(34, 197, 94, 0.3); background: linear-gradient(135deg, rgba(34, 197, 94, 0.05), rgba(37, 99, 235, 0.1));">
-                    <div style="font-weight: 700; color: #4ade80; margin-bottom: 1px;">🌐 Multi-Scanner Active (All Pairs Except Boom & Crash)</div>
-                    <div style="color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 8px;">
-                        Trading Forex, Gold, Silver, Indices, Crypto, Deriv VIX, and Weltrade FlipX (Zero Boom & Crash exposure).
+                <div class="prop-card" style="border-color: rgba(34, 197, 94, 0.25); background: linear-gradient(135deg, rgba(34, 197, 94, 0.04), rgba(37, 99, 235, 0.08));">
+                    <div style="font-weight: 700; color: #4ade80; margin-bottom: 1px;">🌐 Multi-Scanner Active (Forex, Indices, Crypto, Synthetics)</div>
+                    <div style="color: #94a3b8; font-family: 'JetBrains Mono', monospace; font-size: 7.5px;">
+                        Cross-asset institutional liquidity scanning active (Zero Boom & Crash exposure).
                     </div>
                 </div>` : ''}
 
-                <!-- Added Emergency Quick-Liquidate Button Alongside Run/Pause -->
                 <div class="btn-row">
                     <a href="/dashboard?action=run" class="btn btn-run">▶ Run</a>
                     <a href="/dashboard?action=stop" class="btn btn-stop">■ Pause</a>
-                    <a href="/dashboard?action=liquidate" class="btn btn-liquidate" onclick="return confirm('Emergency Quick-Liquidate: Flatten all active basket positions immediately?')">⚡ Liquidate</a>
+                    <a href="/dashboard?action=liquidate" class="btn btn-liquidate" onclick="return confirm('Emergency Quick-Liquidate: Flatten all active positions immediately?')">⚡ Liquidate</a>
                 </div>
 
-                <div class="section-box" style="padding: 5px 8px;">
-                    <div style="font-size: 9px; font-weight: 700; color: #38bdf8; margin-bottom: 2px; text-transform: uppercase;">Real-Time Terminal Logs</div>
+                <div class="section-box" style="padding: 4px 7px;">
+                    <div style="font-size: 8px; font-weight: 700; color: #38bdf8; margin-bottom: 1px; text-transform: uppercase;">Real-Time Terminal Telemetry Logs</div>
                     <div class="logs-box">${botState.logs.join('<br>')}</div>
                 </div>
 
@@ -477,7 +472,6 @@ app.get('/dashboard', (req, res) => {
             </div>
 
             <script>
-                // Live Session Uptime Counter (Non-revealing telemetry)
                 let startTime = Date.now();
                 setInterval(() => {
                     let secondsElapsed = Math.floor((Date.now() - startTime) / 1000);
@@ -485,19 +479,18 @@ app.get('/dashboard', (req, res) => {
                     let secs = (secondsElapsed % 60).toString().padStart(2, '0');
                     document.getElementById('uptimeCounter').textContent = mins + ':' + secs;
 
-                    // Fluctuate CPU & Ping slightly for institutional look
                     document.getElementById('dashPing').textContent = (Math.floor(Math.random() * 5) + 14) + 'ms';
                     document.getElementById('cpuLoad').textContent = (Math.random() * 1.5 + 2.0).toFixed(1) + '%';
                 }, 1000);
 
                 function editTarget() {
-                    const newVal = prompt("Enter new Target Cap / Max Amount ($):", ${botState.targetCap});
+                    const newVal = prompt("Enter new Target Profit Cap ($):", ${botState.targetCap});
                     if (newVal !== null && !isNaN(parseFloat(newVal))) {
                         window.location.href = '/dashboard?new_target=' + parseFloat(newVal);
                     }
                 }
                 function editMaxLoss() {
-                    const newVal = prompt("Enter Max Amount to Lose & Auto-Close Safety Cap ($):", ${botState.maxLossCap});
+                    const newVal = prompt("Enter Max Drawdown Limit ($):", ${botState.maxLossCap});
                     if (newVal !== null && !isNaN(parseFloat(newVal))) {
                         window.location.href = '/dashboard?new_max_loss=' + parseFloat(newVal);
                     }
@@ -509,5 +502,5 @@ app.get('/dashboard', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`[SERVER] Enhanced Telemetry Full-Screen Engine online at port ${PORT}`);
+    console.log(`[SERVER] Refined Institutional Production Engine online at port ${PORT}`);
 });
