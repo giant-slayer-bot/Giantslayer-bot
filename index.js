@@ -1,3 +1,9 @@
+/**
+ * Project: The Giantslayer Bot AI v3.1 (Elite Terminal Edition)
+ * Description: Fully integrated Node.js / Express backend with Elite Login Gateway & Command Center Dashboard.
+ * Deployment Ready: GitHub & Render
+ */
+
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
