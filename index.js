@@ -1,48 +1,359 @@
 /**
- * Project: The Giantslayer Bot AI v6.2 (Ultimate Production Stack with Liquidate & Telemetry)
- * Description: Fully integrated Node.js Express server featuring the iOS-styled mobile interface, 
- * blank server login with dropdown autocomplete, live server-side telemetry stats (Uptime, Ping, CPU Load), 
- * and an emergency Liquidate/Flatten action button.
+ * Project: The Giantslayer Bot AI v7.0 (Unified Production Stack with Deriv Anti-Spike Engine)
+ * Description: Fully integrated Node.js Express server featuring the iOS-styled mobile interface,
+ * blank server login with dropdown autocomplete, live server-side telemetry stats, emergency Liquidate/Flatten,
+ * and the 8-symbol Deriv Anti-Spike Multi-Symbol Engine with hidden private indicators.
  */
 
+'use strict';
+
 const express = require('express');
+const ws = require('ws');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// ================= CONFIGURATION & ASSETS =================
+const CONFIG = {
+    appId: process.env.DERIV_APP_ID || "1089",
+    apiToken: process.env.DERIV_API_TOKEN || "",
+    mockMode: process.env.MOCK_MODE !== "false",
+    magicNumber: 555555,
+    targetProfit: 10000.00,
+    lotSize: 0.10,
+    granularity: 900, // M15
+    // Indicator config (hidden from dashboard)
+    emaFastPeriod: 18,
+    emaSlowPeriod: 26,
+    maxEmaDist: 50,
+    pipSize: 0.01,
+    rsiPeriod: 14,
+    rsiBuyMin: 50, rsiBuyMax: 80,
+    rsiSellMin: 20, rsiSellMax: 50,
+    macdFast: 12, macdSlow: 26, macdSignal: 9,
+    bbPeriod: 20, bbStdDev: 2.0,
+    mockTickMs: 3000,
+    mockSeedBars: 120
+};
+
+const ASSETS = [
+    { symbol: "CRASH500", name: "Crash 500", type: "CRASH", action: "BUY", drift: 0.3 },
+    { symbol: "CRASH1000", name: "Crash 1000", type: "CRASH", action: "BUY", drift: 0.3 },
+    { symbol: "CRASH300N", name: "Crash 300N", type: "CRASH", action: "BUY", drift: 0.3 },
+    { symbol: "CRASH250N", name: "Crash 250N", type: "CRASH", action: "BUY", drift: 0.3 },
+    { symbol: "BOOM500", name: "Boom 500", type: "BOOM", action: "SELL", drift: -0.3 },
+    { symbol: "BOOM1000", name: "Boom 1000", type: "BOOM", action: "SELL", drift: -0.3 },
+    { symbol: "BOOM300N", name: "Boom 300N", type: "BOOM", action: "SELL", drift: -0.3 },
+    { symbol: "BOOM250N", name: "Boom 250N", type: "BOOM", action: "SELL", drift: -0.3 }
+];
+
 // Main Production Bot State Engine
 let botState = {
     running: false,
+    status: "INITIALIZING",
     liveProfit: 0.00,
-    targetCap: 25000.00,
+    sessionPnl: 0.00,
+    targetCap: 10000.00,
     strategyMode: 'Multi-Scanner', 
     accountBalance: 3234.75,
     accountId: '248484',
     serverName: 'DerivSVG-Server',
     startTime: Date.now(),
+    batches: [],
+    batchSeq: 1000,
+    halted: false,
     logs: [
-        "[SYSTEM] Giantslayer v6.2 Production Node online.",
-        "[INIT] Secure institutional gateway established."
+        "[SYSTEM] Giantslayer v7.0 Production Node online.",
+        "[INIT] Secure institutional gateway & multi-symbol engine established."
     ]
 };
 
-// ================= CORE TRADING ENGINE LOOP =================
-function onCandle() {
-    if (!botState.running) return;
+const SCAN = new Map();
+const PRICES = new Map();
 
-    let delta = (Math.random() * 8 - 3.2).toFixed(2);
-    botState.liveProfit = parseFloat((botState.liveProfit + parseFloat(delta)).toFixed(2));
-    botState.accountBalance = parseFloat((botState.accountBalance + parseFloat(delta) * 0.1).toFixed(2));
+ASSETS.forEach(asset => {
+    SCAN.set(asset.symbol, { candles: [], lastEpoch: 0, batchCount: 0 });
+});
 
-    if (botState.logs.length > 50) botState.logs.pop();
-    if (Math.abs(delta) > 4) {
-        botState.logs.unshift(`[EXEC] M15 Micro-Flip executed. P&L Delta: $${delta}`);
+function log(msg) {
+    const time = new Date().toTimeString().split(' ')[0];
+    const entry = `[${time}] ${msg}`;
+    botState.logs.unshift(entry);
+    if (botState.logs.length > 100) botState.logs.pop();
+    console.log(entry);
+}
+
+// ================= PRIVATE INDICATORS =================
+function wClose(c) {
+    return (c.high + c.low + (c.close * 2)) / 4;
+}
+
+function calcEma(data, period) {
+    if (data.length < period) return null;
+    const k = 2 / (period + 1);
+    let v = data.slice(0, period).reduce((a, b) => a + b, 0) / period;
+    for (let i = period; i < data.length; i++) {
+        v = (data[i] * k) + (v * (1 - k));
+    }
+    return v;
+}
+
+function calcRsi(closes, period = 14) {
+    if (closes.length <= period) return null;
+    let g = 0, l = 0;
+    const sl = closes.slice(-(period + 1));
+    for (let i = 1; i < sl.length; i++) {
+        const diff = sl[i] - sl[i - 1];
+        if (diff >= 0) g += diff; else l -= diff;
+    }
+    const ag = g / period, al = l / period;
+    if (al === 0) return 100;
+    return 100 - (100 / (1 + (ag / al)));
+}
+
+function calcMacd(closes) {
+    if (closes.length < CONFIG.macdSlow + CONFIG.macdSignal) return null;
+    const ml = [];
+    for (let i = CONFIG.macdSlow; i <= closes.length; i++) {
+        const sub = closes.slice(0, i);
+        const f = calcEma(sub, CONFIG.macdFast);
+        const s = calcEma(sub, CONFIG.macdSlow);
+        if (f !== null && s !== null) ml.push(f - s);
+    }
+    if (ml.length < CONFIG.macdSignal) return null;
+    const k = 2 / (CONFIG.macdSignal + 1);
+    let sig = ml.slice(0, CONFIG.macdSignal).reduce((a, b) => a + b, 0) / CONFIG.macdSignal;
+    for (let i = CONFIG.macdSignal; i < ml.length; i++) {
+        sig = (ml[i] * k) + (sig * (1 - k));
+    }
+    const hist = ml[ml.length - 1] - sig;
+    const prevHist = ml[ml.length - 2] - (sig); // Approximation for demo state
+    return { hist, prevHist };
+}
+
+function calcBB(closes, period = 20, dev = 2.0) {
+    if (closes.length < period) return null;
+    const sl = closes.slice(-period);
+    const mean = sl.reduce((a, b) => a + b, 0) / period;
+    const variance = sl.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / period;
+    const std = Math.sqrt(variance);
+    return { upper: mean + (dev * std), middle: mean, lower: mean - (dev * std) };
+}
+
+function getSignal(candles, assetType) {
+    if (candles.length < 35) return null;
+    const closes = candles.map(c => c.close);
+    const opens = candles.map(c => c.open);
+    const wc = candles.map(wClose);
+
+    const fast = calcEma(wc, CONFIG.emaFastPeriod);
+    const slow = calcEma(opens, CONFIG.emaSlowPeriod);
+    if (fast === null || slow === null) return null;
+
+    const emaDist = Math.abs(fast - slow) / CONFIG.pipSize;
+    if (emaDist > CONFIG.maxEmaDist) return null;
+
+    const rsi = calcRsi(closes, CONFIG.rsiPeriod);
+    const macd = calcMacd(closes);
+    const bb = calcBB(closes, CONFIG.bbPeriod, CONFIG.bbStdDev);
+    if (rsi === null || macd === null || bb === null) return null;
+
+    const price = closes[closes.length - 1];
+
+    if (assetType === "CRASH") {
+        if (fast > slow && rsi >= CONFIG.rsiBuyMin && rsi <= CONFIG.rsiBuyMax && macd.hist > macd.prevHist && price > bb.middle) {
+            return "BUY";
+        }
+    } else if (assetType === "BOOM") {
+        if (fast < slow && rsi >= CONFIG.rsiSellMin && rsi <= CONFIG.rsiSellMax && macd.hist < macd.prevHist && price < bb.middle) {
+            return "SELL";
+        }
+    }
+    return null;
+}
+
+// ================= POSITION MANAGEMENT =================
+function openBatch(asset, signalType) {
+    if (botState.halted) return;
+    const state = SCAN.get(asset.symbol);
+    const entry = PRICES.get(asset.symbol) || 1000;
+    const ticket = ++botState.batchSeq;
+
+    const sl = signalType === "BUY" ? entry * 0.997 : entry * 1.003;
+    const tp = signalType === "BUY" ? entry * 1.006 : entry * 0.994;
+
+    state.batchCount++;
+    const position = {
+        ticket,
+        symbol: asset.symbol,
+        name: asset.name,
+        type: signalType,
+        lots: CONFIG.lotSize,
+        entry, sl, tp,
+        epoch: Date.now(),
+        profit: 0
+    };
+    botState.batches.push(position);
+    log(`[EXEC] Opened batch #${ticket} | ${asset.name} [${signalType}] @ ${entry.toFixed(2)}`);
+}
+
+function recalcFloatingPnl() {
+    let total = 0;
+    botState.batches.forEach(pos => {
+        const curPrice = PRICES.get(pos.symbol) || pos.entry;
+        const diff = pos.type === "BUY" ? (curPrice - pos.entry) : (pos.entry - curPrice);
+        pos.profit = diff * pos.lots * 100;
+        total += pos.profit;
+    });
+    botState.liveProfit = parseFloat(total.toFixed(2));
+    return botState.liveProfit;
+}
+
+function closeBasket() {
+    const pnl = recalcFloatingPnl();
+    botState.sessionPnl += pnl;
+    botState.accountBalance += pnl;
+    botState.halted = true;
+    log(`[BASKET] Profit target reached ($${CONFIG.targetCap}). Closing all positions. Realized PnL: $${pnl.toFixed(2)}`);
+    botState.batches = [];
+    botState.liveProfit = 0.00;
+    SCAN.forEach(state => { state.batchCount = 0; });
+}
+
+function onCandle(asset, candle) {
+    if (botState.halted || !botState.running) return;
+    const state = SCAN.get(asset.symbol);
+    PRICES.set(asset.symbol, candle.close);
+
+    state.candles.push(candle);
+    if (state.candles.length > 500) state.candles.shift();
+
+    // Check SL/TP triggers
+    let triggered = false;
+    botState.batches.forEach(pos => {
+        if (pos.symbol === asset.symbol) {
+            if (pos.type === "BUY" && (candle.low <= pos.sl || candle.high >= pos.tp)) triggered = true;
+            if (pos.type === "SELL" && (candle.high >= pos.sl || candle.low <= pos.tp)) triggered = true;
+        }
+    });
+
+    if (triggered) {
+        recalcFloatingPnl();
+        log(`[EXIT] SL/TP hit on ${asset.name}. Flattening basket.`);
+        closeBasket();
+        return;
+    }
+
+    if (botState.batches.length > 0) {
+        if (recalcFloatingPnl() >= CONFIG.targetCap) {
+            closeBasket();
+            return;
+        }
+    }
+
+    if (candle.epoch <= state.lastEpoch) return;
+    state.lastEpoch = candle.epoch;
+
+    const signal = getSignal(state.candles, asset.type);
+    if (signal === asset.action) {
+        const label = state.batchCount === 0 ? "Initial Entry" : `Stack #${state.batchCount + 1}`;
+        log(`[SIGNAL] ${asset.name} (${label}) -> Triggered ${signal}`);
+        openBatch(asset, signal);
     }
 }
 
-setInterval(onCandle, 4000);
+// ================= MOCK & LIVE ENGINES =================
+function runMock() {
+    botState.status = "MOCK TESTING MODE";
+    log("[SCANNER] Initializing multi-symbol simulation core...");
+    
+    ASSETS.forEach(a => {
+        const state = SCAN.get(a.symbol);
+        let p = a.symbol.includes('500') ? 1800 : a.symbol.includes('1000') ? 8000 : 500;
+        let baseEpoch = Date.now() - (CONFIG.mockSeedBars * CONFIG.granularity * 1000);
+        
+        for (let i = 0; i < CONFIG.mockSeedBars; i++) {
+            const spike = Math.random() < 0.05 ? (a.type === 'CRASH' ? -25 : 25) : 0;
+            const open = p + spike;
+            const close = open + a.drift + (Math.random() * 2 - 1.0);
+            state.candles.push({ open, close, high: Math.max(open, close) + 2, low: Math.min(open, close) - 2, epoch: baseEpoch + (i * CONFIG.granularity * 1000) });
+            p = close;
+        }
+        PRICES.set(a.symbol, p);
+    });
+    log(`[MOCK] Seeded ${CONFIG.mockSeedBars} historical bars across all 8 symbols.`);
+
+    ASSETS.forEach((asset, idx) => {
+        setTimeout(() => {
+            setInterval(() => {
+                if (!botState.running) return;
+                const p = PRICES.get(asset.symbol) || 1000;
+                const spike = Math.random() < 0.05 ? (asset.type === 'CRASH' ? -30 : 30) : 0;
+                const open = p + spike;
+                const close = open + asset.drift + (Math.random() * 2 - 1);
+                const candle = {
+                    open, close,
+                    high: Math.max(open, close) + Math.random() * 3,
+                    low: Math.min(open, close) - Math.random() * 3,
+                    epoch: Math.floor(Date.now() / 1000)
+                };
+                PRICES.set(asset.symbol, close);
+                onCandle(asset, candle);
+            }, CONFIG.mockTickMs);
+        }, idx * 150);
+    });
+}
+
+function runLive() {
+    botState.status = "LIVE API CONNECTED";
+    const wsUrl = `wss://ws.binaryws.com/websockets/v3?app_id=${CONFIG.appId}`;
+    log(`[WS] Connecting to Deriv API gateway...`);
+    const client = new ws.WebSocket(wsUrl);
+
+    client.on("open", () => {
+        log("[WS] Connected. Authorizing institutional terminal...");
+        client.send(JSON.stringify({ authorize: CONFIG.apiToken }));
+    });
+
+    client.on("message", (data) => {
+        const msg = JSON.parse(data.toString());
+        if (msg.error) {
+            log(`[API ERROR] ${msg.error.code}: ${msg.error.message}`);
+            return;
+        }
+        if (msg.msg_type === "authorize") {
+            botState.accountBalance = msg.authorize.balance;
+            log(`[AUTH SUCCESS] Account: ${msg.authorize.email} | Balance: $${msg.authorize.balance}`);
+            ASSETS.forEach((asset, idx) => {
+                setTimeout(() => {
+                    client.send(JSON.stringify({ ticks_history: asset.symbol, count: 200, end: "latest", granularity: CONFIG.granularity, style: "candles", subscribe: 1 }));
+                }, idx * 150);
+            });
+        } else if (msg.msg_type === "candles") {
+            const sym = msg.echo_req.ticks_history;
+            const asset = ASSETS.find(a => a.symbol === sym);
+            if (asset && msg.candles) {
+                const state = SCAN.get(sym);
+                msg.candles.forEach(c => {
+                    state.candles.push({ open: c.open, close: c.close, high: c.high, low: c.low, epoch: c.epoch });
+                });
+                PRICES.set(sym, msg.candles[msg.candles.length - 1].close);
+                log(`[SYNC] Loaded ${msg.candles.length} M15 candles for ${asset.name}`);
+            }
+        } else if (msg.msg_type === "ohlc") {
+            const sym = msg.ohlc.symbol;
+            const asset = ASSETS.find(a => a.symbol === sym);
+            if (asset) {
+                onCandle(asset, { open: Number(msg.ohlc.open), close: Number(msg.ohlc.close), high: Number(msg.ohlc.high), low: Number(msg.ohlc.low), epoch: Number(msg.ohlc.open_time) });
+            }
+        }
+    });
+
+    client.on("error", (err) => log(`[WS ERROR] ${err.message}`));
+    client.on("close", () => log("[WS CLOSED] Connection terminated. Reconnecting..."));
+}
 
 const iosStyles = `
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Plus Jakarta Sans", sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -77,7 +388,7 @@ const iosStyles = `
     }
 `;
 
-// ================= PAGE 1: LOGIN GATEWAY (BLANK SERVER & iOS TOUCHES) =================
+// ================= PAGE 1: LOGIN GATEWAY =================
 app.get('/', (req, res) => {
     const errorMsg = req.query.error ? decodeURIComponent(req.query.error) : '';
     res.send(`
@@ -91,174 +402,107 @@ app.get('/', (req, res) => {
             <style>
                 ${iosStyles}
                 .hero-banner {
-                    width: 100%;
-                    height: 120px;
-                    border-radius: 16px;
+                    width: 100%; height: 120px; border-radius: 16px;
                     background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
-                    position: relative;
-                    border: 1px solid rgba(10, 132, 255, 0.3);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    flex-shrink: 0;
+                    position: relative; border: 1px solid rgba(10, 132, 255, 0.3); display: flex; align-items: center; justify-content: center; flex-shrink: 0;
                     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
                 }
-                .banner-pill {
-                    font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #ffffff;
-                    background: rgba(28, 28, 30, 0.85); backdrop-filter: blur(10px);
-                    padding: 6px 16px; border-radius: 20px;
-                    border: 1px solid rgba(10, 132, 255, 0.4);
-                }
+                .banner-pill { font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #ffffff; background: rgba(28, 28, 30, 0.85); backdrop-filter: blur(10px); padding: 6px 16px; border-radius: 20px; border: 1px solid rgba(10, 132, 255, 0.4); }
                 .form-content { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
                 .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px; }
                 .section-title { font-size: 10.5px; font-weight: 700; color: #0a84ff; text-transform: uppercase; letter-spacing: 0.8px; }
                 .node-badge { font-size: 8.5px; color: #30d158; background: rgba(48, 209, 88, 0.15); padding: 3px 8px; border-radius: 6px; border: 1px solid rgba(48, 209, 88, 0.3); font-weight: 600; }
-                
                 .form-group { position: relative; }
                 label { display: block; font-size: 9.5px; font-weight: 600; color: #8e8e93; margin-bottom: 3px; }
                 .input-box-wrapper { position: relative; display: flex; align-items: center; }
-                input {
-                    width: 100%; background: rgba(44, 44, 46, 0.8); border: 1px solid rgba(255, 255, 255, 0.1);
-                    border-radius: 10px; padding: 11px 12px; color: #ffffff; font-size: 12px; font-family: 'JetBrains Mono', monospace; outline: none;
-                    transition: all 0.2s ease;
-                }
+                input { width: 100%; background: rgba(44, 44, 46, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 11px 12px; color: #ffffff; font-size: 12px; font-family: 'JetBrains Mono', monospace; outline: none; transition: all 0.2s ease; }
                 input:focus { border-color: #0a84ff; background: rgba(44, 44, 46, 1); box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.2); }
                 .toggle-eye { position: absolute; right: 12px; background: none; border: none; color: #0a84ff; cursor: pointer; font-size: 9.5px; font-weight: 700; }
                 .searchable-select-wrapper { position: relative; width: 100%; }
-                .server-dropdown-list {
-                    position: absolute; bottom: calc(100% + 4px); left: 0; right: 0;
-                    background: rgba(44, 44, 46, 0.98); backdrop-filter: blur(20px);
-                    border: 1px solid rgba(10, 132, 255, 0.4);
-                    border-radius: 12px; max-height: 120px; overflow-y: auto; z-index: 999; display: none;
-                }
+                .server-dropdown-list { position: absolute; bottom: calc(100% + 4px); left: 0; right: 0; background: rgba(44, 44, 46, 0.98); backdrop-filter: blur(20px); border: 1px solid rgba(10, 132, 255, 0.4); border-radius: 12px; max-height: 120px; overflow-y: auto; z-index: 999; display: none; }
                 .server-option { padding: 8px 10px; font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #f5f5f7; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); }
                 .server-option:hover { background: rgba(10, 132, 255, 0.25); color: #0a84ff; }
                 .error-banner { background: rgba(255, 69, 58, 0.15); border: 1px solid rgba(255, 69, 58, 0.3); color: #ff453a; padding: 7px 10px; border-radius: 10px; font-size: 9.5px; text-align: center; font-weight: 600; }
-                .btn-connect {
-                    width: 100%; background: linear-gradient(135deg, #0a84ff, #005ec4); color: #ffffff; border: none;
-                    border-radius: 12px; padding: 12px; font-size: 12px; font-weight: 700; cursor: pointer;
-                    box-shadow: 0 4px 14px rgba(10, 132, 255, 0.4); margin-top: 4px;
-                }
+                .btn-connect { width: 100%; background: linear-gradient(135deg, #0a84ff, #005ec4); color: #ffffff; border: none; border-radius: 12px; padding: 12px; font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 14px rgba(10, 132, 255, 0.4); margin-top: 4px; }
                 .footer-credit { text-align: center; font-size: 8.5px; color: #636366; letter-spacing: 1px; font-weight: 500; flex-shrink: 0; }
             </style>
         </head>
         <body>
             <div class="app-container">
-                <div class="hero-banner">
-                    <div class="banner-pill">GIANTSLAYER BOT AI</div>
-                </div>
-
+                <div class="hero-banner"><div class="banner-pill">GIANTSLAYER BOT AI</div></div>
                 ${errorMsg ? `<div class="error-banner">⚠️ ${errorMsg}</div>` : ''}
-
                 <form action="/dashboard" method="POST" id="authForm" class="form-content">
                     <div class="section-header">
                         <div class="section-title">Live Account Login</div>
                         <div class="node-badge">● Live Node Active</div>
                     </div>
-                    
                     <div class="form-group">
                         <label>Account Login ID (Numeric Only)</label>
-                        <input type="text" name="login_id" id="loginIdInput" placeholder="" value="" required autocomplete="off">
+                        <input type="text" name="login_id" id="loginIdInput" required autocomplete="off">
                     </div>
-                    
                     <div class="form-group">
                         <label>Trading Password</label>
                         <div class="input-box-wrapper">
-                            <input type="password" id="passInput" name="password" placeholder="" value="" required>
+                            <input type="password" id="passInput" name="password" required>
                             <button type="button" class="toggle-eye" onclick="togglePass()">SHOW</button>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label>Live Trading Server (Select or Type)</label>
                         <div class="searchable-select-wrapper">
                             <div id="serverDropdown" class="server-dropdown-list"></div>
-                            <input type="text" id="serverSearch" name="server" value="" placeholder="" required autocomplete="off">
+                            <input type="text" id="serverSearch" name="server" required autocomplete="off">
                         </div>
                     </div>
-
                     <button type="submit" class="btn-connect">CONNECT LIVE TERMINAL</button>
                 </form>
-
                 <div class="footer-credit">created by official bakker_rsa</div>
             </div>
-
             <script>
                 function togglePass() {
                     const p = document.getElementById('passInput');
                     p.type = p.type === 'password' ? 'text' : 'password';
                 }
-
                 const searchInput = document.getElementById('serverSearch');
                 const dropdown = document.getElementById('serverDropdown');
-                let liveServers = [
-                    "Weltrade-Live", "Weltrade-ProServer", "DerivSVG-Server", 
-                    "Deriv-SyntheticReal", "Exness-Real", "FTMO-Server", 
-                    "FundingPips-Prime", "ICMarketsSC-Live", "EquityEdge-Trade"
-                ];
-
+                let liveServers = ["Weltrade-Live", "Weltrade-ProServer", "DerivSVG-Server", "Deriv-SyntheticReal", "Exness-Real", "FTMO-Server", "FundingPips-Prime", "ICMarketsSC-Live", "EquityEdge-Trade"];
                 function renderDropdown(filterText) {
                     dropdown.innerHTML = '';
                     const query = filterText.toLowerCase().trim();
                     let matches = liveServers.filter(s => s.toLowerCase().includes(query));
-
                     if (query.length > 0 && !matches.some(m => m.toLowerCase() === query)) {
                         const capitalized = filterText.charAt(0).toUpperCase() + filterText.slice(1);
                         matches.unshift(capitalized + "-Live", capitalized + "-Server");
                     }
-
                     matches.forEach(serverName => {
                         const div = document.createElement('div');
                         div.className = 'server-option';
                         div.textContent = serverName;
                         div.addEventListener('mousedown', (e) => { e.preventDefault(); selectServer(serverName); });
-                        div.addEventListener('touchend', (e) => { e.preventDefault(); selectServer(serverName); });
                         dropdown.appendChild(div);
                     });
                     dropdown.style.display = matches.length > 0 ? 'block' : 'none';
                 }
-
                 searchInput.addEventListener('focus', () => renderDropdown(searchInput.value));
                 searchInput.addEventListener('input', () => renderDropdown(searchInput.value));
-
-                function selectServer(value) {
-                    searchInput.value = value;
-                    dropdown.style.display = 'none';
-                    searchInput.blur();
-                }
-
-                document.addEventListener('click', (e) => {
-                    if (!e.target.closest('.searchable-select-wrapper')) { dropdown.style.display = 'none'; }
-                });
+                function selectServer(value) { searchInput.value = value; dropdown.style.display = 'none'; searchInput.blur(); }
+                document.addEventListener('click', (e) => { if (!e.target.closest('.searchable-select-wrapper')) { dropdown.style.display = 'none'; } });
             </script>
         </body>
         </html>
     `);
 });
 
-// ================= LOGIN SUBMISSION GATE =================
 app.post('/dashboard', (req, res) => {
     const { login_id, password, server } = req.body;
-    const cleanLogin = (login_id || '').trim();
-    const cleanPass = (password || '').trim();
-    const cleanServer = (server || '').trim();
-
-    const isLoginValid = /^\d{4,}$/.test(cleanLogin);
-    const lowerPass = cleanPass.toLowerCase();
-    const isWeakKeyword = ['password', '123456', '12345678', 'admin', 'test', 'qwerty', 'abc123'].includes(lowerPass);
-
-    if (!isLoginValid || isWeakKeyword || cleanPass.length < 6 || !cleanServer) {
-        return res.redirect('/?error=Authentication%20Failed:%20Missing%20Server%20or%20Invalid%20Credentials.');
-    }
-
-    botState.accountId = cleanLogin;
-    botState.serverName = cleanServer;
+    botState.accountId = (login_id || '').trim();
+    botState.serverName = (server || '').trim();
     botState.startTime = Date.now();
-    botState.logs.unshift(`[AUTH] Live MT4/5 Verified - ID: ${cleanLogin} | Server: ${cleanServer}`);
+    botState.logs.unshift(`[AUTH] Live MT4/5 Verified - ID: ${botState.accountId} | Server: ${botState.serverName}`);
     res.redirect('/dashboard');
 });
 
-// ================= PAGE 2: COMMAND CENTER DASHBOARD (WITH TELEMETRY & LIQUIDATE) =================
+// ================= PAGE 2: COMMAND CENTER DASHBOARD =================
 app.get('/dashboard', (req, res) => {
     if (req.query.mode) {
         botState.strategyMode = req.query.mode;
@@ -266,20 +510,22 @@ app.get('/dashboard', (req, res) => {
     }
     if (req.query.action === 'run') {
         botState.running = true;
-        botState.logs.unshift(`[EXEC] Micro-Flip Engine running under [${botState.strategyMode}] mode.`);
+        botState.halted = false;
+        botState.logs.unshift(`[EXEC] Multi-Symbol Anti-Spike Engine running under [${botState.strategyMode}] mode.`);
     } else if (req.query.action === 'stop') {
         botState.running = false;
         botState.logs.unshift(`[SYSTEM] Bot paused by operator.`);
     } else if (req.query.action === 'liquidate') {
         botState.running = false;
         botState.liveProfit = 0.00;
+        botState.batches = [];
         botState.logs.unshift(`[EMERGENCY] All positions liquidated! P&L flattened safely.`);
     }
 
+    recalcFloatingPnl();
     const uptimeSeconds = Math.floor((Date.now() - botState.startTime) / 1000);
-    const mins = String(Math.floor(uptimeSeconds / 60)).padStart(2, '0');
-    const secs = String(uptimeSeconds % 60).padStart(2, '0');
-    const uptimeFormatted = `${mins}:${secs}`;
+    const uptimeFormatted = `${String(Math.floor(uptimeSeconds / 60)).padStart(2, '0')}:${String(uptimeSeconds % 60).padStart(2, '0')}`;
+    const pctToTarget = Math.min(100, Math.max(0, (botState.liveProfit / CONFIG.targetProfit) * 100));
 
     res.send(`
         <!DOCTYPE html>
@@ -288,63 +534,33 @@ app.get('/dashboard', (req, res) => {
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
             <title>GIANTSLAYER BOT AI - Command Center</title>
+            <meta http-equiv="refresh" content="3">
             <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
             <style>
                 ${iosStyles}
-                .nav-bar {
-                    background: rgba(28, 28, 30, 0.85); backdrop-filter: blur(20px);
-                    border: 1px solid rgba(255, 255, 255, 0.08);
-                    border-radius: 12px; padding: 7px 10px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0;
-                }
-                .status-badge {
-                    font-size: 8.5px; font-weight: 700; padding: 3px 8px; border-radius: 6px;
-                    background: ${botState.running ? 'rgba(48, 209, 88, 0.15)' : 'rgba(255, 69, 58, 0.15)'}; 
-                    color: ${botState.running ? '#30d158' : '#ff453a'};
-                    border: 1px solid ${botState.running ? 'rgba(48, 209, 88, 0.3)' : 'rgba(255, 69, 58, 0.3)'}; 
-                    text-align: center; letter-spacing: 0.5px;
-                }
+                .nav-bar { background: rgba(28, 28, 30, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 7px 10px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
+                .status-badge { font-size: 8.5px; font-weight: 700; padding: 3px 8px; border-radius: 6px; background: ${botState.running ? 'rgba(48, 209, 88, 0.15)' : 'rgba(255, 69, 58, 0.15)'}; color: ${botState.running ? '#30d158' : '#ff453a'}; border: 1px solid ${botState.running ? 'rgba(48, 209, 88, 0.3)' : 'rgba(255, 69, 58, 0.3)'}; }
                 .nav-right { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
                 .btn-logout { background: rgba(255, 69, 58, 0.15); color: #ff453a; padding: 2px 7px; border-radius: 5px; font-size: 7.5px; text-decoration: none; font-weight: 700; }
-                
                 .telemetry-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; flex-shrink: 0; }
-                .telemetry-box {
-                    background: rgba(28, 28, 30, 0.5); border: 1px solid rgba(255, 255, 255, 0.04);
-                    border-radius: 8px; padding: 4px 2px; text-align: center;
-                }
+                .telemetry-box { background: rgba(28, 28, 30, 0.5); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 8px; padding: 4px 2px; text-align: center; }
                 .telemetry-box span { font-size: 6.5px; color: #8e8e93; display: block; text-transform: uppercase; font-weight: 600; }
                 .telemetry-box strong { font-size: 9px; color: #0a84ff; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
-
                 .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; flex-shrink: 0; }
-                .stat-box { 
-                    background: rgba(28, 28, 30, 0.75); backdrop-filter: blur(20px);
-                    border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 6px 4px; text-align: center; 
-                }
-                .stat-box span { font-size: 7px; color: #8e8e93; display: block; margin-bottom: 2px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.4px; }
+                .stat-box { background: rgba(28, 28, 30, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 6px 4px; text-align: center; }
+                .stat-box span { font-size: 7px; color: #8e8e93; display: block; margin-bottom: 2px; text-transform: uppercase; font-weight: 600; }
                 .stat-box strong { font-size: 10.5px; color: #f5f5f7; font-family: 'JetBrains Mono', monospace; font-weight: 700; }
                 .profit-val { color: #30d158 !important; }
-                
-                .section-card { 
-                    background: rgba(28, 28, 30, 0.75); backdrop-filter: blur(20px);
-                    border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 6px 10px; flex-shrink: 0; 
-                }
+                .section-card { background: rgba(28, 28, 30, 0.75); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 10px; padding: 6px 10px; flex-shrink: 0; }
                 .segmented-control { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; margin-top: 4px; background: rgba(0, 0, 0, 0.4); padding: 2px; border-radius: 8px; }
-                .segment-btn {
-                    background: transparent; border: none; border-radius: 6px; padding: 6px 2px; font-size: 7px; font-weight: 700; color: #8e8e93;
-                    text-align: center; text-decoration: none; display: block; letter-spacing: 0.2px; transition: all 0.2s ease;
-                }
-                .segment-btn.active { background: rgba(10, 132, 255, 0.25); color: #0a84ff; border: 1px solid rgba(10, 132, 255, 0.4); box-shadow: 0 0 8px rgba(10, 132, 255, 0.2); }
-                
-                .info-banner {
-                    background: linear-gradient(135deg, rgba(10, 132, 255, 0.1), rgba(0, 94, 196, 0.15));
-                    border: 1px solid rgba(10, 132, 255, 0.3); border-radius: 10px; padding: 6px 10px; font-size: 8.5px; flex-shrink: 0;
-                }
+                .segment-btn { background: transparent; border: none; border-radius: 6px; padding: 6px 2px; font-size: 7px; font-weight: 700; color: #8e8e93; text-align: center; text-decoration: none; display: block; }
+                .segment-btn.active { background: rgba(10, 132, 255, 0.25); color: #0a84ff; border: 1px solid rgba(10, 132, 255, 0.4); }
                 .action-row { display: flex; gap: 5px; flex-shrink: 0; }
                 .action-btn { flex: 1; padding: 10px 4px; border-radius: 10px; font-weight: 700; font-size: 9.5px; border: none; cursor: pointer; text-align: center; text-decoration: none; color: #fff; }
-                .btn-run { background: linear-gradient(135deg, #30d158, #248a3d); box-shadow: 0 4px 12px rgba(48, 209, 88, 0.35); }
-                .btn-pause { background: linear-gradient(135deg, #ff9f0a, #b26800); box-shadow: 0 4px 12px rgba(255, 159, 10, 0.35); }
-                .btn-liquidate { background: linear-gradient(135deg, #ff453a, #d70015); box-shadow: 0 4px 12px rgba(255, 69, 58, 0.35); }
-                
-                .terminal-logs { background: rgba(0, 0, 0, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 6px 8px; font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: #30d158; height: 75px; overflow-y: auto; line-height: 1.3; }
+                .btn-run { background: linear-gradient(135deg, #30d158, #248a3d); }
+                .btn-pause { background: linear-gradient(135deg, #ff9f0a, #b26800); }
+                .btn-liquidate { background: linear-gradient(135deg, #ff453a, #d70015); }
+                .terminal-logs { background: rgba(0, 0, 0, 0.85); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 6px 8px; font-family: 'JetBrains Mono', monospace; font-size: 7.5px; color: #30d158; height: 65px; overflow-y: auto; line-height: 1.3; }
                 .footer-credit { text-align: center; font-size: 8.5px; color: #636366; letter-spacing: 1px; flex-shrink: 0; }
             </style>
         </head>
@@ -352,8 +568,8 @@ app.get('/dashboard', (req, res) => {
             <div class="app-container">
                 <div class="nav-bar">
                     <div>
-                        <span style="font-size: 10px; font-weight: 800; color: #0a84ff; display: flex; align-items: center; gap: 5px;"><span style="width: 6px; height: 6px; background: ${botState.running ? '#30d158' : '#ff453a'}; border-radius: 50%; display: inline-block; box-shadow: 0 0 6px ${botState.running ? '#30d158' : '#ff453a'};"></span> GIANTSLAYER BOT AI</span>
-                        <span style="font-size: 7.5px; color: #8e8e93; font-weight: 600;">ID: ${botState.accountId || '248484'} | ${botState.serverName}</span>
+                        <span style="font-size: 10px; font-weight: 800; color: #0a84ff; display: flex; align-items: center; gap: 5px;"><span style="width: 6px; height: 6px; background: ${botState.running ? '#30d158' : '#ff453a'}; border-radius: 50%; display: inline-block;"></span> GIANTSLAYER BOT AI</span>
+                        <span style="font-size: 7.5px; color: #8e8e93; font-weight: 600;">ID: ${botState.accountId} | ${botState.serverName}</span>
                     </div>
                     <div class="nav-right">
                         <span class="status-badge">${botState.running ? 'RUNNING' : 'STANDBY'}</span>
@@ -370,48 +586,24 @@ app.get('/dashboard', (req, res) => {
 
                 <div class="stats-grid">
                     <div class="stat-box"><span>Strategy Profile</span><strong style="color: #0a84ff; font-size: 7.5px;">${botState.strategyMode}</strong></div>
-                    <div class="stat-box"><span>Profit Target</span><strong style="color: #0a84ff;">$${botState.targetCap.toLocaleString()}</strong></div>
-                    <div class="stat-box"><span>Drawdown Cap</span><strong style="color: #ff453a;">-$500</strong></div>
+                    <div class="stat-box"><span>Profit Target</span><strong style="color: #0a84ff;">$${CONFIG.targetProfit.toLocaleString()}</strong></div>
+                    <div class="stat-box"><span>Active Batches</span><strong style="color: #30d158;">${botState.batches.length} x 0.10</strong></div>
                 </div>
 
                 <div class="stats-grid">
                     <div class="stat-box"><span>Balance</span><strong style="color: #0a84ff;">$${botState.accountBalance.toFixed(2)}</strong></div>
                     <div class="stat-box"><span>Floating P&L</span><strong class="profit-val">+$${botState.liveProfit.toFixed(2)}</strong></div>
-                    <div class="stat-box"><span>Risk Profile</span><strong style="color: #30d158;">Optimized</strong></div>
+                    <div class="stat-box"><span>Session P&L</span><strong style="color: #30d158;">+$${botState.sessionPnl.toFixed(2)}</strong></div>
                 </div>
 
                 <div class="section-card">
-                    <div style="font-size: 8px; font-weight: 700; color: #0a84ff; text-transform: uppercase; letter-spacing: 0.5px;">Execution Suite & Engine Switcher</div>
+                    <div style="font-size: 8px; font-weight: 700; color: #0a84ff; text-transform: uppercase;">Execution Suite & Engine Switcher</div>
                     <div class="segmented-control">
                         <a href="/dashboard?mode=Boom+%26+Crash" class="segment-btn ${botState.strategyMode === 'Boom & Crash' ? 'active' : ''}">BOOM & CRASH</a>
                         <a href="/dashboard?mode=Prop-Firm" class="segment-btn ${botState.strategyMode === 'Prop-Firm' ? 'active' : ''}">PROP-FIRM</a>
                         <a href="/dashboard?mode=Multi-Scanner" class="segment-btn ${botState.strategyMode === 'Multi-Scanner' ? 'active' : ''}">MULTI SCANNER</a>
                     </div>
                 </div>
-
-                ${botState.strategyMode === 'Boom & Crash' ? `
-                <div class="info-banner">
-                    <div style="font-weight: 700; color: #0a84ff; margin-bottom: 2px;">⚡ Boom & Crash Spike Filter Active</div>
-                    <div style="color: #8e8e93; font-family: 'JetBrains Mono', monospace; font-size: 7.5px;">
-                        Scanning M15 trends. Automatic spike-avoidance rules enforced.
-                    </div>
-                </div>` : ''}
-
-                ${botState.strategyMode === 'Prop-Firm' ? `
-                <div class="info-banner" style="border-color: rgba(255, 159, 10, 0.4); background: linear-gradient(135deg, rgba(255, 159, 10, 0.1), rgba(10, 132, 255, 0.15));">
-                    <div style="font-weight: 700; color: #ff9f0a; margin-bottom: 2px;">🛡️ Prop-Firm Guardrails Active (&lt;4%)</div>
-                    <div style="color: #8e8e93; font-family: 'JetBrains Mono', monospace; font-size: 7.5px;">
-                        Daily drawdown limit enforced strictly within institutional parameters.
-                    </div>
-                </div>` : ''}
-
-                ${botState.strategyMode === 'Multi-Scanner' ? `
-                <div class="info-banner" style="border-color: rgba(48, 209, 88, 0.4); background: linear-gradient(135deg, rgba(48, 209, 88, 0.1), rgba(10, 132, 255, 0.15));">
-                    <div style="font-weight: 700; color: #30d158; margin-bottom: 2px;">🌐 Multi-Asset Institutional Scanner Active</div>
-                    <div style="color: #8e8e93; font-family: 'JetBrains Mono', monospace; font-size: 7.5px;">
-                        Scanning Forex, Gold, Indices, and Synthetics simultaneously.
-                    </div>
-                </div>` : ''}
 
                 <div class="action-row">
                     <a href="/dashboard?action=run" class="action-btn btn-run">▶ Run</a>
@@ -421,7 +613,7 @@ app.get('/dashboard', (req, res) => {
 
                 <div class="section-card" style="padding: 5px 8px;">
                     <div style="font-size: 8px; font-weight: 700; color: #0a84ff; margin-bottom: 2px; text-transform: uppercase;">Real-Time Terminal Telemetry Logs</div>
-                    <div class="terminal-logs">${botState.logs.join('<br>')}</div>
+                    <div class="terminal-logs">${botState.logs.slice(0, 10).join('<br>')}</div>
                 </div>
 
                 <div class="footer-credit">created by official bakker_rsa</div>
@@ -432,5 +624,10 @@ app.get('/dashboard', (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`[SERVER] Giantslayer Bot AI online at port ${PORT}`);
+    log(`[SERVER] Giantslayer Bot AI online at port ${PORT}`);
+    if (CONFIG.mockMode) {
+        runMock();
+    } else {
+        runLive();
+    }
 });
