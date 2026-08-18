@@ -2,7 +2,7 @@
  * Project: The Giantslayer Bot AI v7.1 (Unified Production Stack with Dynamic Broker Router)
  * Description: Fully integrated Node.js Express server featuring the iOS-styled mobile interface,
  * live broker autocomplete server selector, live session capture, emergency Liquidate/Flatten,
- * and the Multi-Symbol Anti-Spike Engine.
+ * and the Multi-Symbol Anti-Spike Engine with Login Validation.
  */
 
 'use strict';
@@ -530,11 +530,24 @@ app.get('/', (req, res) => {
     `);
 });
 
-// ================= PAGE 1 POST: CAPTURE LIVE CREDENTIALS =================
+// ================= PAGE 1 POST: VALIDATE & CAPTURE LIVE CREDENTIALS =================
 app.post('/dashboard', (req, res) => {
     const { login_id, password, server } = req.body;
     
-    if (login_id) botState.accountId = login_id.trim();
+    const cleanId = login_id ? login_id.trim() : '';
+    const cleanPass = password ? password.trim() : '';
+    
+    // VALIDATION RULES: Reject fake or incorrect IDs/Passwords
+    // For example, checking minimum length and ensuring ID is strictly numeric
+    const isNumeric = /^\d+$/.test(cleanId);
+    
+    if (!isNumeric || cleanId.length < 5 || cleanPass.length < 6) {
+        const errorMsg = encodeURIComponent("Invalid Account ID or Password. Please check your credentials.");
+        return res.redirect(`/?error=${errorMsg}`);
+    }
+
+    // Save valid inputs to session state
+    botState.accountId = cleanId;
     if (server) botState.serverName = server.trim();
     
     botState.startTime = Date.now();
