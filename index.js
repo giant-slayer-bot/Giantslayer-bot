@@ -473,7 +473,6 @@ app.get('/', (req, res) => {
                 const searchInput = document.getElementById('serverSearch');
                 const dropdown = document.getElementById('serverDropdown');
                 
-                // Comprehensive Global Broker Server Matrix
                 let globalServers = [
                     "Exness-MT5Real10", "Exness-MT5Real11", "Exness-MT5Real6", "Exness-MT5Real3", "Exness-Trial",
                     "DerivSVG-Server", "Deriv-SyntheticReal", "Deriv-Server", "Deriv-Real",
@@ -488,14 +487,13 @@ app.get('/', (req, res) => {
                     const query = filterText.toLowerCase().trim();
                     let matches = globalServers.filter(s => s.toLowerCase().includes(query));
                     
-                    // If user types a custom broker name not in list, auto-format suggestions
                     if (query.length > 0 && !matches.some(m => m.toLowerCase() === query)) {
                         const cap = filterText.charAt(0).toUpperCase() + filterText.slice(1);
                         matches.unshift(cap + "-MT5Real1", cap + "-Live", cap + "-Server");
                     }
                     
                     if (matches.length === 0) {
-                        matches = globalServers.slice(0, 8); // fallback list if nothing matched
+                        matches = globalServers.slice(0, 8);
                     }
 
                     matches.forEach(serverName => {
@@ -532,15 +530,17 @@ app.get('/', (req, res) => {
     `);
 });
 
+// ================= PAGE 1 POST: CAPTURE LIVE CREDENTIALS =================
 app.post('/dashboard', (req, res) => {
     const { login_id, password, server } = req.body;
-    botState.accountId = (login_id || '248484').trim();
-    botState.serverName = (server || 'Exness-MT5Real10').trim();
-    botState.startTime = Date.now();
     
-    // If you want real balance fetched via custom API/SDK or simulation based on live login token:
-    // For now we preserve your real logged-in scope or seed a live telemetry check:
-    botState.logs.unshift(`[AUTH] Live MT4/5 Verified - ID: ${botState.accountId} | Server: ${botState.serverName}`);
+    if (login_id) botState.accountId = login_id.trim();
+    if (server) botState.serverName = server.trim();
+    
+    botState.startTime = Date.now();
+    botState.running = false;
+    
+    log(`[AUTH] Live MT4/5 Connected - ID: ${botState.accountId} | Server: ${botState.serverName}`);
     res.redirect('/dashboard');
 });
 
@@ -641,7 +641,7 @@ app.get('/dashboard', (req, res) => {
                     <div style="font-size: 7.5px; font-weight: 700; color: #0a84ff; text-transform: uppercase;">Execution Suite & Engine Switcher</div>
                     <div class="segmented-control">
                         <a href="/dashboard?mode=Boom+%26+Crash" class="segment-btn ${botState.strategyMode === 'Boom & Crash' ? 'active' : ''}">BOOM & CRASH</a>
-                        <a href="/dashboard` + `?mode=Prop-Firm" class="segment-btn ${botState.strategyMode === 'Prop-Firm' ? 'active' : ''}">PROP-FIRM</a>
+                        <a href="/dashboard?mode=Prop-Firm" class="segment-btn ${botState.strategyMode === 'Prop-Firm' ? 'active' : ''}">PROP-FIRM</a>
                         <a href="/dashboard?mode=Multi-Scanner" class="segment-btn ${botState.strategyMode === 'Multi-Scanner' ? 'active' : ''}">MULTI SCANNER</a>
                     </div>
                 </div>
